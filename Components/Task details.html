@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Details Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #2d6df6;
+            --bg-light: #f4f7fe;
+            --text-main: #1a1c1e;
+            --text-muted: #74777f;
+            --card-white: #ffffff;
+            --escalated-red: #ff5252;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #d0e2ff 0%, #f4f7fe 30%);
+            display: flex;
+            justify-content: center;
+            color: var(--text-main);
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 414px; /* iPhone 11/12 size */
+            height: 100vh;
+            background-color: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .app-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-title { font-size: 1.5rem; font-weight: 700; }
+        .profile-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+
+        /* Navigation Row */
+        .nav-row {
+            padding: 0 20px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .back-btn {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            width: 44px;
+            height: 44px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .task-header-info { flex-grow: 1; }
+        .task-title { font-size: 1.15rem; font-weight: 700; margin: 0; }
+        .project-name { color: var(--primary-blue); font-size: 0.95rem; font-weight: 500; }
+        .tag-escalated {
+            background: var(--escalated-red);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Main Content Card */
+        .details-card {
+            background: var(--card-white);
+            margin: 0 15px;
+            border-radius: 16px;
+            flex-grow: 1;
+            padding: 24px;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        /* Progress Section */
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .progress-label { font-weight: 700; }
+        .progress-count { color: var(--primary-blue); font-size: 0.9rem; font-weight: 600; }
+        
+        .progress-bar-bg {
+            background: #e1e2ec;
+            height: 8px;
+            border-radius: 10px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .progress-bar-fill {
+            background: var(--primary-blue);
+            height: 100%;
+            border-radius: 10px;
+            width: 81%; /* 9 of 11 */
+        }
+
+        /* Info Groups */
+        .info-group { display: flex; gap: 15px; margin-bottom: 24px; }
+        .info-icon { opacity: 0.4; margin-top: 3px; }
+        .info-label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 4px; }
+        .info-value { font-weight: 500; line-height: 1.4; }
+        .map-link { color: var(--primary-blue); text-decoration: none; font-size: 0.9rem; font-weight: 600; display: block; margin-top: 8px; }
+
+        .divider { height: 1px; background: #eee; margin: 20px 0; }
+
+        .section-title { font-weight: 700; margin-bottom: 12px; }
+        .section-text { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+
+        /* Floating Chat Button */
+        .chat-fab {
+            position: absolute;
+            bottom: 110px;
+            right: 25px;
+            background: #6c93f8;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(108, 147, 248, 0.4);
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        /* Overlay Styles */
+        .chat-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .chat-overlay.active { display: flex; }
+        .overlay-content {
+            width: 100%;
+            max-width: 414px;
+            height: 80%;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            overflow: hidden;
+        }
+        .badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff5252;
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        /* Bottom Action Button */
+        .footer-action {
+            padding: 20px;
+            background: white;
+        }
+        .resume-btn {
+            background: var(--primary-blue);
+            color: white;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    <header class="app-header">
+        <span class="header-title">Tasks</span>
+        <img src="https://i.imgur.com/8Km9tLL.png" alt="Profile" class="profile-img">
+    </header>
+
+    <div class="nav-row">
+        <button class="back-btn" onclick="window.location.href='../Tasks.html'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="task-header-info">
+            <h2 class="task-title">Turbine Inspection</h2>
+            <span class="project-name">Project Alpha</span>
+        </div>
+        <div class="tag-escalated">🚩 Escalated</div>
+    </div>
+
+    <main class="details-card">
+        <div class="progress-header">
+            <span class="progress-label">Progress</span>
+            <span class="progress-count">9 of 11 completed</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill"></div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-icon">📍</div>
+            <div>
+                <div class="info-label">Location</div>
+                <div class="info-value">Wind Farm Site A, North Sector Unit 7</div>
+                <a href="#" class="map-link">View on Map</a>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-icon">📅</div>
+            <div>
+                <div class="info-label">Date</div>
+                <div class="info-value">24/09/2021</div>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <div class="info-icon">👤</div>
+            <div>
+                <div class="info-label">Assigned By</div>
+                <div class="info-value">John Manager</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-title">Description</div>
+        <p class="section-text">Perform regular safety audit and blade structural integrity check.</p>
+
+        <div class="divider"></div>
+
+        <div class="section-title">Requirements</div>
+        <p class="section-text">Ensure lubrication system is functioning properly. Check for any visible damage or wear. Document all findings with photographs.</p>
+    </main>
+
+    <div class="chat-fab" onclick="document.getElementById('chatOverlay').classList.add('active')">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <div class="badge">3</div>
+    </div>
+
+    <footer class="footer-action">
+        <button class="resume-btn">Resume Task</button>
+    </footer>
+
+    <!-- Chat Overlay Container -->
+    <div class="chat-overlay" id="chatOverlay" onclick="this.classList.remove('active')">
+        <div class="overlay-content" onclick="event.stopPropagation()">
+            <iframe src="Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

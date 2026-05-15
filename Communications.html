@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Align 360 Move — Communications</title>
+  <link rel="stylesheet" href="css/global.css" />
+</head>
+<body>
+  <div class="app-shell communications-shell">
+    
+    <!-- Top Header -->
+    <header class="calendar-top-header">
+      <h1>Messages</h1>
+      <button class="icon-button" style="border-radius: 50%; background: var(--primary); color: #ffffff; width: 44px; height: 44px; box-shadow: 0 4px 12px rgba(24,102,255,0.2); border: none;">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-bar" style="margin-bottom: 16px;">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" placeholder="Search messages..." />
+    </div>
+
+    <!-- View Toggle Tabs -->
+    <div class="toggle-tabs">
+      <a href="#" class="tab active">All</a>
+      <a href="#" class="tab">Unread <span class="badge-count" style="background: #ff6b6b;">2</span></a>
+      <a href="#" class="tab">Teams</a>
+    </div>
+
+    <!-- Message List -->
+    <div class="message-list">
+      
+      <!-- Thread 1 (Unread) -->
+      <a href="#" class="message-list-item">
+        <div class="msg-avatar blue-card">TI</div>
+        <div class="msg-content">
+          <h3 style="color: #111;">Turbine Inspection Team</h3>
+          <p style="color: #111; font-weight: 500;">Alexa: The phase 2 tests are complete.</p>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time" style="color: var(--primary); font-weight: 600;">09:41 AM</span>
+          <span class="badge-count" style="background: var(--primary);">3</span>
+        </div>
+      </a>
+
+      <!-- Thread 2 (Unread) -->
+      <a href="#" class="message-list-item">
+        <div class="msg-avatar purple-card">DS</div>
+        <div class="msg-content">
+          <h3 style="color: #111;">Dubai Site Updates</h3>
+          <p style="color: #111; font-weight: 500;">John: Can someone confirm the delivery?</p>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time" style="color: var(--primary); font-weight: 600;">Yesterday</span>
+          <span class="badge-count" style="background: var(--primary);">1</span>
+        </div>
+      </a>
+
+      <!-- Thread 3 (Read) -->
+      <a href="#" class="message-list-item">
+        <div class="msg-avatar" style="background: #e2e8f0; color: #555;">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </div>
+        <div class="msg-content">
+          <h3>Sarah Jenkins</h3>
+          <p>The updated manuals are in the shared drive.</p>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time">Tue</span>
+        </div>
+      </a>
+
+      <!-- Thread 4 (Read) -->
+      <a href="#" class="message-list-item">
+        <div class="msg-avatar" style="background: var(--warning);">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </div>
+        <div class="msg-content">
+          <h3>System Alerts</h3>
+          <p>Maintenance required on Generator Alpha-1.</p>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time">Sep 2</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Bottom Navigation Floating Bar -->
+    <div id="bottom-nav-container"></div>
+    <script>
+      fetch('components/bottom nav.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('bottom-nav-container').innerHTML = data;
+          const navItems = document.querySelectorAll('.bottom-nav-bar .nav-item');
+          if (navItems.length >= 4) {
+            navItems.forEach(el => el.classList.remove('active'));
+            navItems[3].classList.add('active'); // Index 3 = Messages
+          }
+        })
+        .catch(err => console.error('Error loading bottom nav:', err));
+    </script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat UI Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at top right, #e0ebff, #f4f7fe 50%);
+            --text-main: #1a1c1e;
+            --text-muted: #8e9199;
+            --incoming-bg: #ffffff;
+            --outgoing-bg: #d0e2ff;
+            --accent-blue: #2d6df6;
+            --avatar-blue: #8ba9f9;
+            --avatar-green: #81c995;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Header Area */
+        .chat-header {
+            padding: 30px 20px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            width: 44px;
+            height: 44px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .header-info { flex-grow: 1; }
+        .header-title { font-size: 1.1rem; font-weight: 700; margin: 0; color: var(--text-main); }
+        .header-subtitle { color: var(--accent-blue); font-size: 0.95rem; font-weight: 500; }
+        
+        .tag-escalated {
+            background: #ff5252;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Message List */
+        .message-area {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .msg-row { display: flex; gap: 12px; }
+        .msg-row.outgoing { flex-direction: row-reverse; }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .avatar.mj { background-color: var(--avatar-blue); }
+        .avatar.you { background-color: var(--avatar-green); }
+
+        .msg-content { max-width: 80%; }
+        .msg-meta { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            margin-bottom: 6px; 
+            font-size: 0.85rem; 
+        }
+        .sender-name { font-weight: 700; color: var(--text-main); }
+        .msg-time { color: var(--text-muted); font-size: 0.8rem; }
+
+        .bubble {
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            line-height: 1.45;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .incoming .bubble {
+            background: var(--incoming-bg);
+            border-radius: 4px 18px 18px 18px;
+            color: var(--text-main);
+        }
+
+        .outgoing .bubble {
+            background: var(--outgoing-bg);
+            border-radius: 18px 4px 18px 18px;
+            color: #1a3a63;
+        }
+
+        /* Bottom Input Bar */
+        .input-container {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .input-box {
+            background: white;
+            flex-grow: 1;
+            height: 56px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .plus-btn { color: var(--text-muted); font-size: 1.5rem; margin-right: 15px; cursor: pointer; }
+        .input-box input {
+            border: none;
+            width: 100%;
+            font-size: 1rem;
+            outline: none;
+            color: var(--text-main);
+        }
+        .input-box input::placeholder { color: var(--text-muted); }
+
+        .send-btn {
+            width: 56px;
+            height: 56px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(45, 109, 246, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    <header class="chat-header">
+        <button class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="header-info">
+            <h2 class="header-title">Turbine Inspection</h2>
+            <div class="header-subtitle">Project Alpha</div>
+        </div>
+        <div class="tag-escalated">🚩 Escalated</div>
+    </header>
+
+    <main class="message-area">
+        
+        <div class="msg-row incoming">
+            <div class="avatar mj">MJ</div>
+            <div class="msg-content">
+                <div class="msg-meta">
+                    <span class="sender-name">Mike Johnson</span>
+                    <span class="msg-time">2:01 PM</span>
+                </div>
+                <div class="bubble">Hi! How's the turbine inspection going?</div>
+            </div>
+        </div>
+
+        <div class="msg-row incoming">
+            <div class="avatar mj">MJ</div>
+            <div class="msg-content">
+                <div class="msg-meta">
+                    <span class="sender-name">Mike Johnson</span>
+                    <span class="msg-time">2:01 PM</span>
+                </div>
+                <div class="bubble">Hi! How's the turbine inspection going?</div>
+            </div>
+        </div>
+
+        <div class="msg-row outgoing">
+            <div class="avatar you">MJ</div> <div class="msg-content">
+                <div class="msg-meta">
+                    <span class="sender-name">You</span>
+                    <span class="msg-time">2:01 PM</span>
+                </div>
+                <div class="bubble">Good morning! Just started. Weather conditions are good.</div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="input-container">
+        <div class="input-box">
+            <span class="plus-btn">+</span>
+            <input type="text" placeholder="Type....">
+        </div>
+        <button class="send-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+        </button>
+    </footer>
+</div>
+
+</body>
+</html>

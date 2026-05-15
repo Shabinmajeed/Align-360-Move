@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expandable Site Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-main: #000000;
+            --text-secondary: #757575;
+            --link-blue: #1a73e8;
+            --icon-gray: #9aa0a6;
+            --bg-subcard: #f5f8fa;
+            --tag-red: #ff5252;
+            --tag-purple: #6c5ce7;
+            --tag-blue: #0984e3;
+        }
+
+        body {
+            background-color: #e2e2e2;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Parent Card */
+        .main-card {
+            background: #fff;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.06);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Summary Header (Image 1 & 3) */
+        .card-header {
+            padding: 24px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+
+        .site-title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .site-name { font-size: 1.4rem; font-weight: 700; margin: 0; }
+
+        .location-label {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            gap: 5px;
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .date-label {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            gap: 8px;
+            font-size: 1.05rem;
+        }
+
+        .today-btn {
+            color: var(--link-blue);
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        /* Icon Button */
+        .expand-btn {
+            background: #f1f3f4;
+            border: none;
+            border-radius: 12px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        /* Nested Content Container */
+        .expanded-section {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fff;
+        }
+
+        .main-card.is-expanded .expanded-section {
+            max-height: 2000px; /* Large value to allow growth */
+            padding-bottom: 24px;
+        }
+
+        .main-card.is-expanded .expand-btn {
+            transform: rotate(180deg);
+        }
+
+        /* Sub-cards (Image 2 style) */
+        .inspection-list {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 24px;
+        }
+
+        .inspection-item {
+            background: var(--bg-subcard);
+            border-radius: 20px;
+            padding: 20px;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .inspection-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+        .ins-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .ins-title { font-weight: 700; font-size: 1.15rem; margin: 0; }
+        
+        .project-name {
+            color: var(--link-blue);
+            font-weight: 500;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .ins-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .ins-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(0,0,0,0.04);
+            padding-top: 12px;
+        }
+
+        /* Status Tags */
+        .status-tag {
+            color: #fff;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .escalated { background: var(--tag-red); }
+        .upcoming { background: var(--tag-purple); }
+        .progress { background: var(--tag-blue); }
+
+        .icon-svg { width: 18px; height: 18px; stroke: var(--icon-gray); stroke-width: 2; fill: none; }
+    </style>
+</head>
+<body>
+
+<div class="main-card" id="siteCard">
+    <div class="card-header" onclick="toggleExpand()">
+        <div style="flex-grow: 1;">
+            <div class="site-title-row">
+                <h2 class="site-name">Dubai Site</h2>
+                <div class="location-label">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    North Sector- Unit 7
+                </div>
+            </div>
+            
+            <div class="footer-row">
+                <div class="date-label">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    24/09/2021 - 26/09/2021
+                </div>
+                <span class="today-btn">Today</span>
+            </div>
+        </div>
+
+        <button class="expand-btn">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+    </div>
+
+    <div class="expanded-section">
+        <div class="inspection-list">
+            
+            <a href="Task details.html" class="inspection-item">
+                <div class="ins-header">
+                    <h3 class="ins-title">Turbine Inspection</h3>
+                    <div class="status-tag escalated">🚩 Escalated</div>
+                </div>
+                <span class="project-name">Project Alpha</span>
+                <p class="ins-desc">Perform regular safety audit and blade structural integrity check. Ensure lubrication system, Lorem ipsum...</p>
+                <div class="ins-footer">
+                    <div style="display:flex; gap:5px; align-items:center;">📍 North Sector- Unit 7</div>
+                    <div style="display:flex; gap:5px; align-items:center;">📅 24/09/2021</div>
+                </div>
+            </a>
+
+            <a href="Task details.html" class="inspection-item">
+                <div class="ins-header">
+                    <h3 class="ins-title">Turbine Inspection</h3>
+                    <div class="status-tag upcoming">🏳️ Upcoming</div>
+                </div>
+                <span class="project-name">Project Alpha</span>
+                <p class="ins-desc">Perform regular safety audit and blade structural integrity check. Ensure lubrication system, Lorem ipsum...</p>
+                <div class="ins-footer">
+                    <div style="display:flex; gap:5px; align-items:center;">📍 North Sector- Unit 7</div>
+                    <div style="display:flex; gap:5px; align-items:center;">📅 24/09/2021</div>
+                </div>
+            </a>
+
+            <a href="Task details.html" class="inspection-item">
+                <div class="ins-header">
+                    <h3 class="ins-title">Turbine Inspection</h3>
+                    <div class="status-tag progress">🟦 In Progress</div>
+                </div>
+                <span class="project-name">Project Alpha</span>
+                <div class="ins-footer" style="border:none; padding:0;">
+                </div>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleExpand() {
+        const card = document.getElementById('siteCard');
+        card.classList.toggle('is-expanded');
+    }
+</script>
+
+</body>
+</html>
