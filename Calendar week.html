@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Align 360 Move — Calendar Week</title>
+  <link rel="stylesheet" href="css/global.css" />
+</head>
+<body>
+  <div class="app-shell calendar-shell">
+    
+    <!-- Top Header -->
+    <header class="calendar-top-header">
+      <h1>Calendar</h1>
+      <button class="icon-button" style="border-radius: 50%; background: #ffffff; width: 44px; height: 44px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border);">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- View Toggle Tabs -->
+    <div class="toggle-tabs">
+      <a href="Calendar week.html" class="tab active">Week</a>
+      <a href="Calendar.html" class="tab">Month</a>
+    </div>
+
+    <!-- Week Navigation -->
+    <div class="calendar-month-nav">
+      <button class="nav-arrow" aria-label="Previous Week">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h2>Sep 6 – 12, 2026</h2>
+      <button class="nav-arrow" aria-label="Next Week">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <!-- Weekly Calendar Card -->
+    <div class="calendar-card" style="padding: 16px 12px;">
+      <div class="calendar-week-view">
+        <div class="week-day">
+          <span>Sun</span>
+          <strong>6</strong>
+        </div>
+        <div class="week-day">
+          <span>Mon</span>
+          <strong>7</strong>
+        </div>
+        <div class="week-day">
+          <span>Tue</span>
+          <strong>8</strong>
+        </div>
+        <div class="week-day active">
+          <span>Wed</span>
+          <strong>9</strong>
+          <span class="event-dot" style="margin-top: 4px; background: #ffffff;"></span>
+        </div>
+        <div class="week-day">
+          <span>Thu</span>
+          <strong>10</strong>
+          <span class="event-dot" style="margin-top: 4px;"></span>
+        </div>
+        <div class="week-day">
+          <span>Fri</span>
+          <strong>11</strong>
+        </div>
+        <div class="week-day">
+          <span>Sat</span>
+          <strong>12</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scheduled Tasks / Time Grid -->
+    <div class="home-section-header">
+      <h3>Schedule for Sep 9</h3>
+      <a href="#" class="link-show-all">Add Task</a>
+    </div>
+
+    <div class="time-grid">
+      <!-- 08:00 Time Slot -->
+      <div class="time-slot">
+        <div class="time-label">08:00</div>
+        <div class="time-content">
+          <div class="task-progress-section" style="margin: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-left: 4px solid var(--primary);">
+            <div class="progress-labels">
+              <span style="color: #111; font-weight: 600;">Dubai Site Inspection</span>
+            </div>
+            <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Location: Christ Building</p>
+            <div class="card-footer" style="justify-content: space-between;">
+              <span style="color: #b45309; font-weight: 500;">In Progress</span>
+              <span style="font-size: 12px; color: #999;">2h duration</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 09:00 Time Slot -->
+      <div class="time-slot">
+        <div class="time-label">09:00</div>
+        <div class="time-content"></div>
+      </div>
+      
+      <!-- 10:00 Time Slot -->
+      <div class="time-slot">
+        <div class="time-label">10:00</div>
+        <div class="time-content"></div>
+      </div>
+      
+      <!-- 11:00 Time Slot -->
+      <div class="time-slot">
+        <div class="time-label">11:00</div>
+        <div class="time-content"></div>
+      </div>
+
+      <!-- 12:00 Time Slot -->
+      <div class="time-slot">
+        <div class="time-label">12:00</div>
+        <div class="time-content">
+          <div class="task-progress-section" style="margin: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-left: 4px solid var(--text-muted);">
+            <div class="progress-labels">
+              <span style="color: #111; font-weight: 600;">Turbine Maintenance</span>
+            </div>
+            <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Location: Main Campus Plant</p>
+            <div class="card-footer" style="justify-content: space-between;">
+              <span style="color: #7d8bac; font-weight: 500;">Scheduled</span>
+              <span style="font-size: 12px; color: #999;">1h duration</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 13:00 Time Slot -->
+      <div class="time-slot">
+        <div class="time-label">13:00</div>
+        <div class="time-content"></div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Floating Bar -->
+    <div id="bottom-nav-container"></div>
+    <script>
+      fetch('bottom nav.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('bottom-nav-container').innerHTML = data;
+          const navItems = document.querySelectorAll('.bottom-nav-bar .nav-item');
+          if (navItems.length >= 3) {
+            navItems.forEach(el => el.classList.remove('active'));
+            navItems[2].classList.add('active');
+          }
+        })
+        .catch(err => console.error('Error loading bottom nav:', err));
+    </script>
+  </div>
+</body>
+</html>

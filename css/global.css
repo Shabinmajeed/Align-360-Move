@@ -585,31 +585,39 @@ input[type="password"] {
 
 .toggle-tabs {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 24px;
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 0;
 }
 
 .toggle-tabs .tab {
   flex: 1;
-  padding: 16px;
-  border-radius: 24px;
+  padding: 12px 0;
+  border-radius: 0;
   border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
-  background: #ffffff;
-  color: #333;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  background: transparent;
+  color: var(--text-medium);
+  box-shadow: none;
   transition: all 0.2s ease;
 }
 
 .toggle-tabs .tab.active {
-  background: #2a2a2a;
-  color: #ffffff;
+  background: transparent;
+  color: var(--primary);
+  box-shadow: none;
+  border-bottom-color: var(--primary);
 }
 
 .badge-count {
@@ -933,7 +941,7 @@ input[type="password"] {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px 4px;
+  gap: 12px 0;
 }
 
 .calendar-day {
@@ -941,7 +949,9 @@ input[type="password"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1;
+  width: 38px;
+  height: 38px;
+  margin: 0 auto;
   font-size: 14px;
   font-weight: 500;
   color: #333;
@@ -958,6 +968,7 @@ input[type="password"] {
 .calendar-day.active {
   background: #1866ff;
   color: #ffffff;
+  box-shadow: 0 4px 12px rgba(24, 102, 255, 0.3);
 }
 
 .calendar-day.selected {
@@ -968,7 +979,7 @@ input[type="password"] {
   display: flex;
   gap: 3px;
   position: absolute;
-  bottom: 4px;
+  bottom: 2px;
 }
 
 .event-dot {
@@ -985,4 +996,85 @@ input[type="password"] {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* =========================================
+   Week View Styles
+   ========================================= */
+
+.calendar-week-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.week-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 10px 4px;
+  border-radius: 24px;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.week-day span {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.week-day strong {
+  font-size: 15px;
+  color: var(--text-strong);
+  font-weight: 600;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.week-day.active {
+  background: var(--primary);
+}
+
+.week-day.active span {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.week-day.active strong {
+  color: #ffffff;
+}
+
+.time-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 16px;
+}
+
+.time-slot {
+  display: flex;
+  gap: 16px;
+  min-height: 80px;
+}
+
+.time-label {
+  width: 50px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: right;
+  padding-top: 8px;
+}
+
+.time-content {
+  flex: 1;
+  border-top: 1px solid var(--border);
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

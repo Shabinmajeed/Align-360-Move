@@ -20,6 +20,12 @@
       </button>
     </header>
 
+    <!-- View Toggle Tabs -->
+    <div class="toggle-tabs">
+      <a href="Calendar week.html" class="tab">Week</a>
+      <a href="Calendar.html" class="tab active">Month</a>
+    </div>
+
     <!-- Month Navigation -->
     <div class="calendar-month-nav">
       <button class="nav-arrow" aria-label="Previous Month">
@@ -131,7 +137,7 @@
     <!-- Bottom Navigation Floating Bar -->
     <div id="bottom-nav-container"></div>
     <script>
-      fetch('/componentes/Bottom nav.html')
+      fetch('bottom nav.html')
         .then(response => response.text())
         .then(data => {
           document.getElementById('bottom-nav-container').innerHTML = data;
