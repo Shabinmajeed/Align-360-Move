@@ -1,18 +1,142 @@
-<nav class="bottom-nav-bar">
-  <a class="nav-item active" href="Home page.html">
-    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-    Home
-  </a>
-  <a class="nav-item" href="Tasks.html">
-    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-    Task
-  </a>
-  <a class="nav-item" href="Calendar.html">
-    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-    Calendar
-  </a>
-  <a class="nav-item" href="Communications.html">
-    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-    Messages
-  </a>
-</nav>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bottom Nav Prototype</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --nav-bg: #ffffff;
+            --active-blue: #3b82f6;
+            --inactive-gray: #8e8e93;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            height: 100vh;
+        }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #7d8bac;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    width: 60px;
+  }
+
+        /* Container for the Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px; /* Floating style like your image */
+            left: 25px;
+            right: 25px;
+            width: auto;
+            margin: 0 auto;
+            max-width: 320px;
+            background-color: var(--nav-bg);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 0;
+            border-radius: 40px; /* Highly rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+  .nav-item.active {
+    color: #1866ff;
+  }
+
+        /* Individual Nav Item */
+        .nav-item {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--inactive-gray);
+            transition: color 0.2s ease;
+            flex: 1;
+        }
+  .nav-item svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    fill: none;
+    transition: transform 0.2s ease;
+  }
+
+        .nav-item i {
+            margin-bottom: 4px;
+        }
+  .nav-item.active svg {
+    fill: currentColor;
+    stroke: currentColor;
+    transform: translateY(-2px);
+  }
+
+        .nav-item span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Active State */
+        .nav-item.active {
+            color: var(--active-blue);
+        }
+
+        /* Content Area Padding so Nav doesn't cover text */
+        .content {
+            padding: 20px;
+            padding-bottom: 100px; 
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="bottom-nav">
+        <a href="../Home page.html" class="nav-item">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="../Tasks.html" class="nav-item">
+            <i data-lucide="layout-grid"></i>
+            <span>Task</span>
+        </a>
+        <a href="../Calendar.html" class="nav-item">
+            <i data-lucide="calendar"></i>
+            <span>Calendar</span>
+        </a>
+        <a href="../Communications.html" class="nav-item">
+            <i data-lucide="mail"></i>
+            <span>Messages</span>
+        </a>
+    </nav>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Dynamically highlight the active nav item based on the current page URL
+        const navItems = document.querySelectorAll('.nav-item');
+        const currentUrl = window.location.href;
+
+        navItems.forEach(item => {
+            const href = item.getAttribute('href');
+            const pageName = href.substring(href.lastIndexOf('/') + 1);
+            
+            if (currentUrl.includes(encodeURI(pageName)) || currentUrl.includes(pageName)) {
+                item.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

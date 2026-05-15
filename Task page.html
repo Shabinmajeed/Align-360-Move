@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Align 360 Move — Tasks</title>
+  <title>Align 360 Move — Task Page</title>
   <link rel="stylesheet" href="css/global.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="app-shell tasks-shell">
@@ -36,11 +37,30 @@
       <a href="#" class="tab">Completed</a>
     </div>
 
-    <!-- Task List -->
-    <div class="task-list-view">
-    </div>
+    <!-- Task List Container -->
+    <div id="task-list-container" style="padding-bottom: 100px;"></div>
 
-   <div id="bottom-nav-container"></div>
+    <script>
+      // Load the site card component into the task list
+      fetch('./components/site card.html')
+        .then(response => response.text())
+        .then(data => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, 'text/html');
+          document.getElementById('task-list-container').innerHTML = doc.body.innerHTML;
+          
+          // Ensure the JavaScript (toggleExpand) from the fetched component is evaluated
+          const scripts = doc.querySelectorAll('script');
+          scripts.forEach(script => {
+            const newScript = document.createElement('script');
+            newScript.textContent = script.textContent;
+            document.body.appendChild(newScript);
+          });
+        });
+    </script>
+   
+    <!-- Bottom Navigation Floating Bar -->
+    <div id="bottom-nav-container"></div>
     <script>
       fetch('components/bottom nav.html?v=2')
         .then(response => response.text())

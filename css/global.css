@@ -60,7 +60,8 @@ a {
 }
 
 .app-shell {
-  width: 375px;
+  width: 100%;
+  max-width: 360px;
   min-height: 812px;
   padding: 24px;
   margin: 32px 0;
@@ -490,7 +491,7 @@ input[type="password"] {
 
 .home-shell {
   background: #f1f4fb; /* Soft gradient-like blue background */
-  padding: 32px 24px 120px 24px; /* Bottom padding for floating nav */
+  padding: 32px 24px 140px 24px; /* Bottom padding for floating nav */
   position: relative;
   overflow-x: hidden;
 }
@@ -823,56 +824,6 @@ input[type="password"] {
 .new-msgs {
   color: #ff6b6b;
   font-size: 13px;
-}
-
-.bottom-nav-bar {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 48px);
-  max-width: 320px;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 28px;
-  box-shadow: 0 12px 36px rgba(10, 45, 90, 0.12);
-}
-
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  color: #7d8bac;
-  font-size: 11px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.nav-item.active {
-  color: #1866ff;
-}
-
-.nav-item svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  fill: none;
-  transition: transform 0.2s ease;
-}
-
-.nav-item.active svg {
-  fill: currentColor;
-  stroke: currentColor;
-  transform: translateY(-2px);
 }
 
 /* =========================================
@@ -1291,11 +1242,11 @@ input[type="password"] {
 .main-card {
   background: #fff;
   border-radius: 28px;
-  width: 100%;
   box-shadow: 0 4px 25px rgba(0,0,0,0.06);
   overflow: hidden;
   transition: all 0.3s ease;
   margin-bottom: 16px;
+  -moz-transform-origin: top left;
 }
 .main-card .card-header {
   padding: 24px 28px;

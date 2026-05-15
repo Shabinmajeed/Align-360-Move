@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Align 360 Move — Communications</title>
   <link rel="stylesheet" href="css/global.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="app-shell communications-shell">
@@ -98,11 +99,12 @@
     <!-- Bottom Navigation Floating Bar -->
     <div id="bottom-nav-container"></div>
     <script>
-      fetch('components/bottom nav.html')
+      fetch('components/bottom nav.html?v=2')
         .then(response => response.text())
         .then(data => {
           document.getElementById('bottom-nav-container').innerHTML = data;
-          const navItems = document.querySelectorAll('.bottom-nav-bar .nav-item');
+          lucide.createIcons();
+          const navItems = document.querySelectorAll('.bottom-nav .nav-item');
           if (navItems.length >= 4) {
             navItems.forEach(el => el.classList.remove('active'));
             navItems[3].classList.add('active'); // Index 3 = Messages
