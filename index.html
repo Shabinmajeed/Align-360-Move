@@ -3,98 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Align 360 Move — Dashboard</title>
+  <title>Align 360 Move — Log In</title>
   <link rel="stylesheet" href="css/global.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <header class="app-header">
-      <div>
-        <p class="eyebrow">Field Operations</p>
-        <h1>Align 360 Move</h1>
-      </div>
-      <button class="icon-button" aria-label="Notifications">🔔</button>
-    </header>
-
-    <section class="status-card">
-      <div class="status-card-row">
-        <div>
-          <p class="status-label">Active Task</p>
-          <h2>Inspect pump house</h2>
-        </div>
-        <span class="badge badge-warning">In progress</span>
-      </div>
-      <div class="status-meta">
-        <div>
-          <p class="status-meta-label">Due</p>
-          <p>Today, 4:30 PM</p>
-        </div>
-        <div>
-          <p class="status-meta-label">Location</p>
-          <p>Site 12</p>
-        </div>
-      </div>
+  <div class="app-shell login-shell">
+    <section class="login-hero">
+      <div class="logo-mark">⛑️</div>
+      <p class="eyebrow">Field Operations</p>
+      <h1>Align 360 Move</h1>
+      <p class="login-subtitle">Sign in to your account</p>
     </section>
 
-    <section class="quick-summary">
-      <article class="summary-card">
-        <p class="summary-small">Pending</p>
-        <h3>4</h3>
-      </article>
-      <article class="summary-card">
-        <p class="summary-small">Completed</p>
-        <h3>12</h3>
-      </article>
-      <article class="summary-card">
-        <p class="summary-small">Overdue</p>
-        <h3>1</h3>
-      </article>
-    </section>
+    <section class="login-container">
+      <form class="login-form">
+        <label class="input-group">
+          <span class="input-label">Email</span>
+          <input type="email" id="email" placeholder="name@emircom.com" class="form-input" required />
+        </label>
 
-    <section class="task-list">
-      <div class="section-header">
-        <h2>Today&apos;s Tasks</h2>
-        <a href="#" class="link-secondary">View all</a>
-      </div>
+        <label class="input-group">
+          <span class="input-label">Password</span>
+          <div class="password-field">
+            <input type="password" id="password" placeholder="••••••••" class="form-input" required />
+            <button type="button" id="togglePassword" class="eye-toggle" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </label>
 
-      <article class="task-item task-item-active">
-        <div>
-          <p class="task-title">Replace sensor module</p>
-          <p class="task-subtitle">Pipeline A5 · 2h left</p>
+        <div id="errorMessage" style="color: #d93025; font-size: 0.875rem; display: none; margin-bottom: 1rem;"></div>
+
+        <div class="field-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="rememberMe" />
+            <span>Remember me</span>
+          </label>
+          <a href="Log In fail.html" class="link-secondary">Forgot Password?</a>
         </div>
-        <span class="badge badge-primary">Start</span>
-      </article>
 
-      <article class="task-item">
-        <div>
-          <p class="task-title">Update maintenance log</p>
-          <p class="task-subtitle">Site 8 · 30 min</p>
-        </div>
-        <span class="badge badge-muted">Pending</span>
-      </article>
-
-      <article class="task-item">
-        <div>
-          <p class="task-title">Review safety checklist</p>
-          <p class="task-subtitle">Main campus · 15 min</p>
-        </div>
-        <span class="badge badge-muted">Pending</span>
-      </article>
+        <button type="submit" id="loginBtn" class="primary-button full-width" disabled>Log In</button>
+      </form>
+      <p class="helper-text">Trouble logging in? <a href="#" class="link-secondary">Contact Support</a></p>
     </section>
-
-    <section class="action-panel">
-      <h2>Ready to update?</h2>
-      <p>Tap a task card to change status, add notes, and mark progress.</p>
-      <button class="primary-button">Update Task</button>
-    </section>
-
-    <nav class="bottom-nav">
-      <a class="nav-link active" href="#">Dashboard</a>
-      <a class="nav-link" href="#">Tasks</a>
-      <a class="nav-link" href="#">Reports</a>
-      <a class="nav-link" href="#">Profile</a>
-    </nav>
   </div>
-  <script src="js/app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const loginBtn = document.getElementById('loginBtn');
+      const togglePasswordBtn = document.getElementById('togglePassword');
+      const loginForm = document.querySelector('.login-form');
+      const errorMessage = document.getElementById('errorMessage');
+
+      // 4. Disable log in button if the fields are left blank
+      function checkInputs() {
+        if (emailInput.value.trim() !== '' && passwordInput.value.trim() !== '') {
+          loginBtn.disabled = false;
+        } else {
+          loginBtn.disabled = true;
+        }
+      }
+
+      emailInput.addEventListener('input', checkInputs);
+      passwordInput.addEventListener('input', checkInputs);
+      
+      // Run the check on page load to account for browser autofill
+      setTimeout(checkInputs, 100);
+
+      // 3. Password visibility toggle
+      togglePasswordBtn.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+      });
+
+      // Form submission validation & redirect
+      loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        
+        const emailVal = emailInput.value.trim();
+        const passwordVal = passwordInput.value;
+        
+        // Redirect to fail page if password is too short
+        if (passwordVal.length <= 2) {
+          window.location.href = 'Log In fail.html';
+          return;
+        }
+
+        // 2 & 7. Validate email domain & display error
+        if (!emailVal.endsWith('@emircom.com')) {
+          errorMessage.textContent = 'Please use a valid @emircom.com email address.';
+          errorMessage.style.display = 'block';
+          return;
+        }
+        
+        errorMessage.style.display = 'none';
+        
+        // 6. Redirect to home page upon successful verification
+        window.location.href = 'Home page.html';
+      });
+    });
+  </script>
 </body>
 </html>
