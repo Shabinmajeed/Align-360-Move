@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Align 360 Move — Dashboard</title>
+  <link rel="stylesheet" href="css/global.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Field Operations</p>
+        <h1>Align 360 Move</h1>
+      </div>
+      <button class="icon-button" aria-label="Notifications">🔔</button>
+    </header>
+
+    <section class="status-card">
+      <div class="status-card-row">
+        <div>
+          <p class="status-label">Active Task</p>
+          <h2>Inspect pump house</h2>
+        </div>
+        <span class="badge badge-warning">In progress</span>
+      </div>
+      <div class="status-meta">
+        <div>
+          <p class="status-meta-label">Due</p>
+          <p>Today, 4:30 PM</p>
+        </div>
+        <div>
+          <p class="status-meta-label">Location</p>
+          <p>Site 12</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-summary">
+      <article class="summary-card">
+        <p class="summary-small">Pending</p>
+        <h3>4</h3>
+      </article>
+      <article class="summary-card">
+        <p class="summary-small">Completed</p>
+        <h3>12</h3>
+      </article>
+      <article class="summary-card">
+        <p class="summary-small">Overdue</p>
+        <h3>1</h3>
+      </article>
+    </section>
+
+    <section class="task-list">
+      <div class="section-header">
+        <h2>Today&apos;s Tasks</h2>
+        <a href="#" class="link-secondary">View all</a>
+      </div>
+
+      <article class="task-item task-item-active">
+        <div>
+          <p class="task-title">Replace sensor module</p>
+          <p class="task-subtitle">Pipeline A5 · 2h left</p>
+        </div>
+        <span class="badge badge-primary">Start</span>
+      </article>
+
+      <article class="task-item">
+        <div>
+          <p class="task-title">Update maintenance log</p>
+          <p class="task-subtitle">Site 8 · 30 min</p>
+        </div>
+        <span class="badge badge-muted">Pending</span>
+      </article>
+
+      <article class="task-item">
+        <div>
+          <p class="task-title">Review safety checklist</p>
+          <p class="task-subtitle">Main campus · 15 min</p>
+        </div>
+        <span class="badge badge-muted">Pending</span>
+      </article>
+    </section>
+
+    <section class="action-panel">
+      <h2>Ready to update?</h2>
+      <p>Tap a task card to change status, add notes, and mark progress.</p>
+      <button class="primary-button">Update Task</button>
+    </section>
+
+    <nav class="bottom-nav">
+      <a class="nav-link active" href="#">Dashboard</a>
+      <a class="nav-link" href="#">Tasks</a>
+      <a class="nav-link" href="#">Reports</a>
+      <a class="nav-link" href="#">Profile</a>
+    </nav>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>
