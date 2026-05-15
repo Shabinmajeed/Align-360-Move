@@ -70,7 +70,7 @@
           const navItems = document.querySelectorAll('.bottom-nav .nav-item');
           if (navItems.length >= 1) {
             navItems.forEach(el => el.classList.remove('active'));
-            navItems[0].classList.add('active'); // Index 0 = Home
+            navItems[1].classList.add('active'); // Index 1 = Task
           }
         })
         .catch(err => console.error('Error loading bottom nav:', err));
