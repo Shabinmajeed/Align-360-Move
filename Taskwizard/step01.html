@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turbine Inspection Prototype</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #e0f2ff 0%, #f4f7f9 100%);
+            --card-bg: #ffffff;
+            --primary-blue: #3b82f6;
+            --soft-blue: #60a5fa;
+            --error-red: #f87171;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Phone Container Emulation */
+        .phone-shell {
+            width: 100%;
+            max-width: 414px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        /* --- Header Section --- */
+        header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn-square {
+            background: white;
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        .header-info h2 { font-size: 18px; color: var(--text-dark); }
+        .header-info p { font-size: 14px; color: var(--primary-blue); font-weight: 500; }
+
+        .escalated-badge {
+            margin-left: auto;
+            background: #ff5f5f;
+            color: white;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            flex: 1;
+            padding: 0 20px;
+            overflow-y: auto;
+        }
+
+        /* Progress Card (from previous step) */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .card-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        
+        .btn-view-all {
+            border: 1px solid var(--primary-blue);
+            color: var(--primary-blue);
+            background: transparent;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge {
+            position: absolute;
+            top: -8px; right: -8px;
+            background: var(--error-red);
+            color: white;
+            font-size: 10px;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid white;
+        }
+
+        .progress-bar { height: 6px; background: #eee; border-radius: 10px; flex: 1; margin: 0 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary-blue); width: 9%; }
+
+        /* Question Section */
+        .question-title { font-size: 16px; color: var(--text-dark); margin-bottom: 10px; }
+        .question-desc { font-size: 14px; color: var(--text-muted); line-height: 1.4; margin-bottom: 20px; }
+
+        .binary-options { display: flex; gap: 15px; }
+        .option-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn.selected {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .error-msg {
+            color: var(--error-red);
+            font-size: 13px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* --- Floating Chat --- */
+        .chat-fab {
+            position: absolute;
+            bottom: 120px;
+            right: 20px;
+            background: var(--primary-blue);
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Overlay Styles */
+        .chat-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .chat-overlay.active { display: flex; }
+        .overlay-content {
+            width: 100%;
+            max-width: 414px;
+            height: 80%;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            overflow: hidden;
+        }
+
+        /* --- Footer Section --- */
+        footer {
+            background: white;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .footer-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-back { background: white; border: 1px solid #e2e8f0; color: var(--text-dark); }
+        .btn-next { 
+            background: var(--primary-blue); 
+            border: none; 
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-shell">
+    <header>
+        <button class="back-btn-square"><i data-lucide="chevron-left"></i></button>
+        <div class="header-info">
+            <h2>Turbine Inspection</h2>
+            <p>Project Alpha</p>
+        </div>
+        <div class="escalated-badge">
+            <i data-lucide="flag" size="12"></i> Escalated
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="card">
+            <div class="card-row">
+                <span style="font-weight: 600;">Step 1 of 11</span>
+                <button class="btn-view-all">
+                    <i data-lucide="list" size="16"></i> View All
+                    <span class="badge">10</span>
+                </button>
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+                <span style="font-size: 14px; color: #94a3b8; font-weight: bold;">9%</span>
+            </div>
+            <div style="display: flex; gap: 15px; font-size: 13px; color: var(--text-muted);">
+                <span><span style="color: #10b981;">●</span> 0 answered</span>
+                <span><span style="color: #f87171;">●</span> 10 required</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="question-title">Is the turbine blade free from visible cracks or damage? <span style="color: var(--error-red);">*</span></h3>
+            <p class="question-desc">Visually inspect the entire blade surface for any signs of structural damage.</p>
+            
+            <div class="binary-options">
+                <button class="option-btn"><i data-lucide="check" size="18"></i> Yes</button>
+                <button class="option-btn"><i data-lucide="x" size="18"></i> No</button>
+            </div>
+        </div>
+
+        <div class="error-msg" id="mandatory-error">
+            <i data-lucide="alert-circle" size="16"></i>
+            Please answer this mandatory question to continue
+        </div>
+    </div>
+
+     <div class="chat-fab" onclick="document.getElementById('chatOverlay').classList.add('active')">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <div class="badge">3</div>
+    </div>
+
+    
+
+    <!-- Chat Overlay Container -->
+    <div class="chat-overlay" id="chatOverlay" onclick="this.classList.remove('active')">
+        <div class="overlay-content" onclick="event.stopPropagation()">
+            <iframe src="../Components/Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <button class="footer-btn btn-back" onclick="window.location.href='../Components/Task details.html'">
+            <i data-lucide="chevron-left" size="20"></i> Back
+        </button>
+        <button class="footer-btn btn-next" onclick="window.location.href='step02.html'">
+            Next <i data-lucide="chevron-right" size="20"></i>
+        </button>
+    </footer>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    const optionBtns = document.querySelectorAll('.option-btn');
+    const errorMsg = document.getElementById('mandatory-error');
+
+    optionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const parent = this.closest('.binary-options');
+            parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            
+            // Remove the mandatory error once a button is selected
+            if (errorMsg) {
+                errorMsg.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

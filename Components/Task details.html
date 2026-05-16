@@ -28,7 +28,7 @@
 
         .mobile-container {
             width: 100%;
-            max-width: 360px;
+            max-width: 395px; /* Aligning closer to app-shell max-width logic */
             height: 100vh;
             background-color: var(--bg-light);
             display: flex;
@@ -44,7 +44,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        .header-title { font-size: 1.5rem; font-weight: 700; }
+        .header-title { font-size: 20px; font-weight: 700; }
         .profile-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
 
         /* Navigation Row */
@@ -68,14 +68,14 @@
         }
 
         .task-header-info { flex-grow: 1; }
-        .task-title { font-size: 1.15rem; font-weight: 700; margin: 0; }
-        .project-name { color: var(--primary-blue); font-size: 0.95rem; font-weight: 500; }
+        .task-title { font-size: 22px; font-weight: 700; margin: 0 0 4px 0; }
+        .project-name { color: var(--primary-blue); font-size: 14px; font-weight: 600; }
         .tag-escalated {
             background: var(--escalated-red);
             color: white;
             padding: 4px 12px;
             border-radius: 8px;
-            font-size: 0.75rem;
+            font-size: 12px;
             font-weight: 600;
         }
 
@@ -93,7 +93,7 @@
         /* Progress Section */
         .progress-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
         .progress-label { font-weight: 700; }
-        .progress-count { color: var(--primary-blue); font-size: 0.9rem; font-weight: 600; }
+        .progress-count { color: var(--primary-blue); font-size: 14px; font-weight: 600; }
         
         .progress-bar-bg {
             background: #e1e2ec;
@@ -112,14 +112,14 @@
         /* Info Groups */
         .info-group { display: flex; gap: 15px; margin-bottom: 24px; }
         .info-icon { opacity: 0.4; margin-top: 3px; }
-        .info-label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 4px; }
+        .info-label { color: var(--text-muted); font-size: 13px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
         .info-value { font-weight: 500; line-height: 1.4; }
-        .map-link { color: var(--primary-blue); text-decoration: none; font-size: 0.9rem; font-weight: 600; display: block; margin-top: 8px; }
+        .map-link { color: var(--primary-blue); text-decoration: none; font-size: 14px; font-weight: 600; display: block; margin-top: 8px; }
 
         .divider { height: 1px; background: #eee; margin: 20px 0; }
 
-        .section-title { font-weight: 700; margin-bottom: 12px; }
-        .section-text { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+        .section-text { color: var(--text-muted); line-height: 1.6; font-size: 14px; }
 
         /* Floating Chat Button */
         .chat-fab {
@@ -151,7 +151,7 @@
         .chat-overlay.active { display: flex; }
         .overlay-content {
             width: 100%;
-            max-width: 360px;
+            max-width: 395px;
             height: 80%;
             background: white;
             border-radius: 24px 24px 0 0;
@@ -163,7 +163,8 @@
             right: 0;
             background: #ff5252;
             color: white;
-            font-size: 0.7rem;
+            font-size: 11px;
+            font-weight: 600;
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -185,7 +186,7 @@
             padding: 16px;
             border: none;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
         }
@@ -261,7 +262,7 @@
     </div>
 
     <footer class="footer-action">
-        <button class="resume-btn">Start Task</button>
+        <button onclick="window.location.href='../Taskwizard/step01.html'" class="resume-btn">Start Task</button>
     </footer>
 
     <!-- Chat Overlay Container -->

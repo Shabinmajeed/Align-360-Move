@@ -1242,6 +1242,8 @@ input[type="password"] {
 .main-card {
   background: #fff;
   border-radius: 28px;
+  width: 100%;
+  max-width: 340px;
   box-shadow: 0 4px 25px rgba(0,0,0,0.06);
   overflow: hidden;
   transition: all 0.3s ease;
@@ -1249,20 +1251,20 @@ input[type="password"] {
   -moz-transform-origin: top left;
 }
 .main-card .card-header {
-  padding: 24px 28px;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   cursor: pointer;
   margin-bottom: 0;
 }
-.site-title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-.site-name { font-size: 1.4rem; font-weight: 700; margin: 0; color: var(--text-main); }
-.location-label { display: flex; align-items: center; color: var(--text-secondary); font-size: 1.05rem; gap: 5px; }
+.site-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.site-name { font-size: 16px; font-weight: 700; margin: 0; color: var(--text-main); }
+.location-label { display: flex; align-items: center; color: var(--text-secondary); font-size: 13px; gap: 5px; }
 .footer-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-.date-label { display: flex; align-items: center; color: var(--text-secondary); gap: 8px; font-size: 1.05rem; }
-.today-btn { color: var(--link-blue); font-weight: 600; font-size: 1.05rem; }
-.expand-btn { background: #f1f3f4; border: none; border-radius: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease; }
+.date-label { display: flex; align-items: center; color: var(--text-secondary); gap: 6px; font-size: 12px; }
+.today-btn { color: var(--link-blue); font-weight: 600; font-size: 12px; }
+.expand-btn { background: #f1f3f4; border: none; border-radius: 12px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease; }
 .expanded-section { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); background: #fff; }
 .main-card.is-expanded .expanded-section { max-height: 2000px; padding-bottom: 24px; }
 .main-card.is-expanded .expand-btn { transform: rotate(180deg); }
@@ -1270,15 +1272,15 @@ input[type="password"] {
 .inspection-item { background: var(--bg-subcard); border-radius: 20px; padding: 20px; display: block; text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .inspection-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 .ins-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-.ins-title { font-weight: 700; font-size: 1.15rem; margin: 0; color: var(--text-main); }
-.project-name { color: var(--link-blue); font-weight: 500; font-size: 1rem; display: block; margin-bottom: 12px; }
-.ins-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-bottom: 18px; }
-.ins-footer { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary); border-top: 1px solid rgba(0,0,0,0.04); padding-top: 12px; }
-.status-tag { color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+.ins-title { font-weight: 700; font-size: 15px; margin: 0; color: var(--text-main); }
+.project-name { color: var(--link-blue); font-weight: 500; font-size: 12px; display: block; margin-bottom: 12px; }
+.ins-desc { color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin-bottom: 18px; }
+.ins-footer { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); border-top: 1px solid rgba(0,0,0,0.04); padding-top: 12px; }
+.status-tag { color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
 .escalated { background: var(--tag-red); }
 .upcoming { background: var(--tag-purple); }
 .progress { background: var(--tag-blue); }
-.icon-svg { width: 18px; height: 18px; stroke: var(--icon-gray); stroke-width: 2; fill: none; }
+.icon-svg { width: 12px; height: 12px; stroke: var(--icon-gray); stroke-width: 2; fill: none; }
 
 /* =========================================
    Task Details Page Styles

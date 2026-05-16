@@ -137,21 +137,7 @@
 
     <!-- Bottom Navigation Floating Bar -->
     <div id="bottom-nav-container"></div>
-    <script>
-      fetch('components/bottom nav.html?v=2')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('bottom-nav-container').innerHTML = data;
-          lucide.createIcons();
-          // Highlight the 3rd item (Calendar) dynamically 
-          const navItems = document.querySelectorAll('.bottom-nav .nav-item');
-          if (navItems.length >= 3) {
-            navItems.forEach(el => el.classList.remove('active'));
-            navItems[2].classList.add('active'); // Index 2 = Calendar
-          }
-        })
-        .catch(err => console.error('Error loading bottom nav:', err));
-    </script>
   </div>
+  <script src="js/bottomNav.js"></script>
 </body>
 </html>

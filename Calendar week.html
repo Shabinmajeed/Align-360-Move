@@ -141,19 +141,7 @@
 
     <!-- Bottom Navigation Floating Bar -->
     <div id="bottom-nav-container"></div>
-    <script>
-      fetch('components/bottom nav.html?v=2')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('bottom-nav-container').innerHTML = data;
-          const navItems = document.querySelectorAll('.bottom-nav-bar .nav-item');
-          if (navItems.length >= 3) {
-            navItems.forEach(el => el.classList.remove('active'));
-            navItems[2].classList.add('active');
-          }
-        })
-        .catch(err => console.error('Error loading bottom nav:', err));
-    </script>
   </div>
+  <script src="js/bottomNav.js"></script>
 </body>
 </html>

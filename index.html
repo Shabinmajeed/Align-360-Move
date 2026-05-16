@@ -8,6 +8,9 @@
 </head>
 <body>
   <div class="app-shell login-shell">
+    
+    <!-- COMPONENT: Login Hero Section -->
+    <!-- Displays the brand identity, logo, and primary heading -->
     <section class="login-hero">
       <div class="logo-mark">⛑️</div>
       <p class="eyebrow">Field Operations</p>
@@ -15,13 +18,16 @@
       <p class="login-subtitle">Sign in to your account</p>
     </section>
 
+    <!-- COMPONENT: Login Form Container -->
     <section class="login-container">
       <form class="login-form">
+        <!-- Email Input Group -->
         <label class="input-group">
           <span class="input-label">Email</span>
           <input type="email" id="email" placeholder="name@emircom.com" class="form-input" required />
         </label>
 
+        <!-- Password Input Group with Visibility Toggle -->
         <label class="input-group">
           <span class="input-label">Password</span>
           <div class="password-field">
@@ -30,8 +36,10 @@
           </div>
         </label>
 
+        <!-- Dynamic Error Message Block -->
         <div id="errorMessage" style="color: #d93025; font-size: 0.875rem; display: none; margin-bottom: 1rem;"></div>
 
+        <!-- Form Utilities: Remember Me & Forgot Password -->
         <div class="field-row">
           <label class="checkbox-label">
             <input type="checkbox" id="rememberMe" />
@@ -40,8 +48,11 @@
           <a href="Log In fail.html" class="link-secondary">Forgot Password?</a>
         </div>
 
+        <!-- Primary Action Button -->
         <button type="submit" id="loginBtn" class="primary-button full-width" disabled>Log In</button>
       </form>
+
+      <!-- Secondary Support Link -->
       <p class="helper-text">Trouble logging in? <a href="#" class="link-secondary">Contact Support</a></p>
     </section>
   </div>

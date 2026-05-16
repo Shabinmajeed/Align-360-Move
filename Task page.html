@@ -39,43 +39,12 @@
 
     <!-- Task List Container -->
     <div id="task-list-container" style="padding-bottom: 100px;"></div>
-
-    <script>
-      // Load the site card component into the task list
-      fetch('./components/site card.html')
-        .then(response => response.text())
-        .then(data => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(data, 'text/html');
-          document.getElementById('task-list-container').innerHTML = doc.body.innerHTML;
-          
-          // Ensure the JavaScript (toggleExpand) from the fetched component is evaluated
-          const scripts = doc.querySelectorAll('script');
-          scripts.forEach(script => {
-            const newScript = document.createElement('script');
-            newScript.textContent = script.textContent;
-            document.body.appendChild(newScript);
-          });
-        });
-    </script>
    
+    <script src="js/siteCard.js"></script>
+
     <!-- Bottom Navigation Floating Bar -->
     <div id="bottom-nav-container"></div>
-    <script>
-      fetch('components/bottom nav.html?v=2')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('bottom-nav-container').innerHTML = data;
-          lucide.createIcons();
-          const navItems = document.querySelectorAll('.bottom-nav .nav-item');
-          if (navItems.length >= 1) {
-            navItems.forEach(el => el.classList.remove('active'));
-            navItems[1].classList.add('active'); // Index 1 = Task
-          }
-        })
-        .catch(err => console.error('Error loading bottom nav:', err));
-    </script>
   </div>
-  <script src="js/app.js"></script>
+  <script src="js/bottomNav.js"></script>
 </body>
 </html>
