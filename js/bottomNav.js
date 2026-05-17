@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Fetch Bottom Nav Component
-  fetch('components/bottom nav.html?v=2')
+  fetch('./components/bottom nav.html?v=2')
     .then(response => response.text())
     .then(data => {
       const container = document.getElementById('bottom-nav-container');
