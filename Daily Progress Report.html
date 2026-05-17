@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Align 360 Move — Daily Progress Report</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #e0f2ff 0%, #f4f7f9 100%);
+            --card-bg: #ffffff;
+            --primary-blue: #3b82f6;
+            --soft-blue: #60a5fa;
+            --success-green: #10b981;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        header {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-info h2 { font-size: 16px; color: var(--text-dark); font-weight: 700; }
+        .header-info p { font-size: 13px; color: var(--primary-blue); font-weight: 500; }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            padding-bottom: 90px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Auto-aggregated Metrics Grid */
+        .metrics-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .metric-mini-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 10px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+        }
+        .metric-mini-card .val { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
+        .metric-mini-card .lbl { font-size: 10px; color: var(--text-muted); font-weight: 600; }
+
+        /* Data Ledger Configurations */
+        .ledger-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 11px 0; border-bottom: 1px dashed var(--border-color);
+            font-size: 13px;
+        }
+        .ledger-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .ledger-label { color: var(--text-dark); font-weight: 500; }
+        .ledger-value { font-weight: 600; color: var(--text-muted); }
+
+        /* Form Inputs */
+        .input-group { margin-bottom: 5px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .form-textarea {
+            width: 100%; height: 110px; padding: 12px; border: 1px solid var(--border-color);
+            border-radius: 10px; font-size: 14px; outline: none; resize: none;
+            font-family: inherit; color: var(--text-dark); background: #ffffff;
+        }
+        .form-textarea:focus { border-color: var(--primary-blue); }
+
+        /* Actions Button Configurations */
+        .submit-dpr-btn {
+            width: 100%; padding: 16px; background: var(--primary-blue); color: white;
+            border: none; border-radius: 12px; font-size: 15px; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+
+        /* Success View State Design */
+        .success-wrapper {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px 20px; text-align: center; height: 70%;
+        }
+        .success-icon-frame {
+            width: 72px; height: 72px; border-radius: 50%; background: #d1fae5;
+            color: var(--success-green); display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; box-shadow: 0 6px 16px rgba(16, 185, 129, 0.2);
+        }
+        .success-wrapper h3 { font-size: 20px; color: var(--text-dark); font-weight: 700; margin-bottom: 8px; }
+        .success-wrapper p { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px; }
+
+        /* Sticky Bottom Navigation Bar Layout Framework */
+        .sticky-nav-bar {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 70px; background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 999; padding-bottom: 5px;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: #94a3b8; text-decoration: none; font-size: 10px;
+            font-weight: 600; cursor: pointer; gap: 4px;
+        }
+        .nav-item.active { color: var(--primary-blue); }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <header>
+        <div class="header-info">
+            <h2>Shift Operations Closing</h2>
+            <p id="header-subtitle">Daily Progress Report Summary</p>
+        </div>
+    </header>
+
+    <div class="main-content" id="report-form-view">
+        
+        <div class="metrics-summary-grid">
+            <div class="metric-mini-card">
+                <div class="val">58.4</div>
+                <div class="lbl">KM Logged</div>
+            </div>
+            <div class="metric-mini-card">
+                <div class="val">2</div>
+                <div class="lbl">Tasks Closed</div>
+            </div>
+            <div class="metric-mini-card">
+                <div class="val">3</div>
+                <div class="lbl">Bills Attached</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i data-lucide="file-text" size="15" style="color: var(--primary-blue);"></i>
+                <span>Activity Preview Logs</span>
+            </div>
+            
+            <div class="ledger-row">
+                <span class="ledger-label">Task 3: Legacy to ACI Migration</span>
+                <span class="ledger-value" style="color: var(--success-green);">Completed</span>
+            </div>
+            <div class="ledger-row">
+                <span class="ledger-label">Task 4: Joint Visit with Emircom</span>
+                <span class="ledger-value" style="color: var(--success-green);">Completed</span>
+            </div>
+            <div class="ledger-row">
+                <span class="ledger-label">Cisco 10G Multi-mode SFPs</span>
+                <span class="ledger-value">2 Consumed</span>
+            </div>
+            <div class="ledger-row">
+                <span class="ledger-label">SFP Hardware Waste Logs</span>
+                <span class="ledger-value">1 Defective Item</span>
+            </div>
+            <div class="ledger-row">
+                <span class="ledger-label">Shift Travel Segments</span>
+                <span class="ledger-value">3 Legs Closed</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i data-lucide="message-square" size="15" style="color: var(--text-muted);"></i>
+                <span>Add Shift Notes</span>
+            </div>
+
+            <div class="input-group">
+                <label>Field Deployment Comments / Remarks</label>
+                <textarea class="form-textarea" id="fnd-remarks" placeholder="Provide shift run summaries, network performance notes, or unexpected installation context here..."></textarea>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px; padding: 0 2px;">
+            <button class="submit-dpr-btn" onclick="executeDprFormSubmission()">
+                Submit Daily Progress Report <i data-lucide="send" size="16"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="main-content" id="report-success-view" style="display: none;">
+        <div class="success-wrapper">
+            <div class="success-icon-frame">
+                <i data-lucide="check-check" size="36"></i>
+            </div>
+            <h3>Submitted Successfully</h3>
+            <p>Your continuous metrics, activity rollup history logs, and text summaries have been safely transmitted to the management ledger.</p>
+            <button class="action-btn btn-finish" onclick="window.location.reload()" style="width: 80%; background: var(--primary-blue);">
+                Return to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Floating Bar -->
+    <div id="bottom-nav-container"></div>
+  </div>
+  <script src="./js/bottomNav.js"></script>
+</div>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    function executeDprFormSubmission() {
+        const remarksContent = document.getElementById('fnd-remarks').value.trim();
+
+        if (!remarksContent) {
+            alert("Validation Alert: Please include descriptive comments/remarks before finalizing your daily report.");
+            return;
+        }
+
+        // Hide the standard input form elements layout screen
+        document.getElementById('report-form-view').style.display = 'none';
+        
+        // Render the clean native success status message cards smoothly
+        document.getElementById('report-success-view').style.display = 'block';
+        document.getElementById('header-subtitle').innerText = "Report Transmitted";
+        document.getElementById('header-subtitle').style.color = "var(--success-green)";
+        
+        lucide.createIcons();
+    }
+</script>
+</body>
+</html>

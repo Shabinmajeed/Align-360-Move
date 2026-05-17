@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Align 360 Move — Journey & Expense Tracker</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #e0f2ff 0%, #f4f7f9 100%);
+            --card-bg: #ffffff;
+            --primary-blue: #3b82f6;
+            --soft-blue: #60a5fa;
+            --success-green: #10b981;
+            --error-red: #f87171;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Matches strict app layout phone container size rules */
+        .app-shell {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-info h2 { font-size: 16px; color: var(--text-dark); font-weight: 700; }
+        .header-info p { font-size: 13px; color: var(--primary-blue); font-weight: 500; }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            padding-bottom: 90px; /* Protect content from overlapping floating menu bar */
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Form Inputs */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .form-control {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color);
+            border-radius: 10px; font-size: 14px; outline: none; transition: border 0.2s;
+            background: #ffffff;
+            color: var(--text-dark);
+        }
+        .form-control:focus { border-color: var(--primary-blue); }
+
+        /* Document Camera Frames */
+        .camera-slot {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-size: 13px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .camera-slot.captured {
+            border-style: solid;
+            border-color: var(--success-green);
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        /* Timeline Elements */
+        .timeline-container { display: flex; flex-direction: column; gap: 10px; }
+        .timeline-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px; background: #f1f5f9; border-radius: 10px; font-size: 13px;
+        }
+        .timeline-meta { font-weight: 600; color: var(--text-dark); }
+        .timeline-dist { font-weight: 700; color: var(--primary-blue); }
+
+        /* Layout Utility Actions */
+        .action-btn {
+            width: 100%; padding: 14px; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-start { background: var(--primary-blue); color: white; }
+        .btn-arrive { background: #eab308; color: white; }
+        .btn-finish { background: var(--text-dark); color: white; margin-top: 10px; }
+        .btn-submit { background: var(--success-green); color: white; }
+
+        .expense-row {
+            display: flex; gap: 10px; margin-bottom: 10px; padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color); align-items: center;
+        }
+
+        .error-banner {
+            background: #fef2f2; color: #991b1b; padding: 12px; border-radius: 10px;
+            font-size: 13px; margin-bottom: 15px; display: none; align-items: center; gap: 8px;
+        }
+
+        /* Sticky Bottom Navigation Bar Layout Framework */
+        .sticky-nav-bar {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 70px;
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 999;
+            padding-bottom: 5px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-blue);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <header>
+        <div class="header-info">
+            <h2>Shift Logistics Engine</h2>
+            <p>Journey & Expense Tracker</p>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="error-banner" id="validation-alert">
+            <i data-lucide="alert-triangle" size="16"></i>
+            <span id="error-text">Please input tracking fields to initialize leg.</span>
+        </div>
+
+        <div class="card" id="tracking-card">
+            <div class="card-title" id="card-status-title">
+                <i data-lucide="navigation" size="16" style="color: var(--primary-blue);"></i> 
+                <span>Start New Trip Leg</span>
+            </div>
+
+            <div id="panel-start-state">
+                <div class="input-group">
+                    <label>Destination Target / Purpose</label>
+                    <input type="text" class="form-control" id="trip-desc" placeholder="e.g., Office to DC-02 Primary Hub">
+                </div>
+                <div class="input-group">
+                    <label>Initial Odometer Reading (KM)</label>
+                    <input type="number" class="form-control" id="odo-start" placeholder="Input starting odometer value">
+                </div>
+                <div class="camera-slot" id="cam-start" onclick="simulateSnapshot('cam-start')">
+                    <i data-lucide="camera" size="20"></i>
+                    <span>Snap Odometer Startup Proof</span>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button class="action-btn btn-start" onclick="executeStartLeg()">
+                        Start Journey Leg <i data-lucide="play" size="16"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="panel-arrive-state" style="display: none;">
+                <div class="input-group" style="background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+                    <span style="font-size: 12px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:2px;">ACTIVE TARGET ROUTE</span>
+                    <span id="active-route-lbl" style="font-size: 14px; font-weight:600; color:var(--text-dark);">---</span>
+                </div>
+                <div class="input-group">
+                    <label>Arrival Odometer Reading (KM)</label>
+                    <input type="number" class="form-control" id="odo-end" placeholder="Input termination odometer value">
+                </div>
+                <div class="camera-slot" id="cam-end" onclick="simulateSnapshot('cam-end')">
+                    <i data-lucide="camera" size="20"></i>
+                    <span>Snap Destination Odometer Proof</span>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button class="action-btn btn-arrive" onclick="executeArriveLeg()">
+                        Arrive at Location <i data-lucide="map-pin" size="16"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="history-card">
+            <div class="card-title">
+                <i data-lucide="milestone" size="16" style="color: var(--text-muted);"></i>
+                <span>Today's Logged Leg Timeline</span>
+            </div>
+            <div class="timeline-container" id="timeline-box">
+                <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 15px;" id="empty-history-msg">
+                    No travel loops registered for this operational window yet.
+                </div>
+            </div>
+            <button class="action-btn btn-finish" id="finish-journey-trigger" onclick="finalizeEntireJourney()">
+                Finish Day & Load Field Bills
+            </button>
+        </div>
+
+        <div class="card" id="field-bill-card" style="display: none;">
+            <div class="card-title" style="color: var(--success-green);">
+                <i data-lucide="receipt" size="16"></i>
+                <span>Consolidated Field Bill Attachments</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted); line-height:1.4; margin-bottom:15px;">
+                Your travel segments are locked. Attach out-of-pocket expenses incurred over this shift before formatting submission packet.
+            </p>
+            
+            <div id="bill-upload-repository"></div>
+
+            <button class="camera-slot" id="add-bill-btn" onclick="addNewFieldBillRow()" style="width:100%; border-style:dashed; margin-bottom:20px; background:white;">
+                <i data-lucide="plus-circle" size="18" style="color: var(--primary-blue);"></i>
+                <span style="font-weight: 600; color: var(--primary-blue);">Add Field Bill Attachment</span>
+            </button>
+
+            <button class="action-btn btn-submit" onclick="submitCompleteLogPacket()">
+                Submit Day Log Packet <i data-lucide="check-check" size="18"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Floating Bar -->
+    <div id="bottom-nav-container"></div>
+  </div>
+  <script src="./js/bottomNav.js"></script>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    let activeLegData = null;
+    let loggedLegsArray = [];
+    let photoStatus = { "cam-start": false, "cam-end": false };
+    let temporaryBillCounter = 0;
+
+    function simulateSnapshot(elementId) {
+        photoStatus[elementId] = true;
+        const target = document.getElementById(elementId);
+        target.classList.add('captured');
+        target.innerHTML = `<i data-lucide="check-circle" size="20"></i> <span>Snapshot Secured</span>`;
+        document.getElementById('validation-alert').style.display = 'none';
+        lucide.createIcons();
+    }
+
+    function executeStartLeg() {
+        const descInput = document.getElementById('trip-desc').value.trim();
+        const startValue = parseInt(document.getElementById('odo-start').value);
+        const alertBox = document.getElementById('validation-alert');
+        const alertTxt = document.getElementById('error-text');
+
+        if (!descInput || isNaN(startValue) || !photoStatus["cam-start"]) {
+            alertTxt.innerText = "Validation Error: Fill destination text, starting odometer reading, and snap camera proof.";
+            alertBox.style.display = 'flex';
+            return;
+        }
+
+        if (loggedLegsArray.length > 0 && startValue < loggedLegsArray[loggedLegsArray.length - 1].end) {
+            alertTxt.innerText = `Error: Entry cannot drop below prior arrival parameter (${loggedLegsArray[loggedLegsArray.length - 1].end} KM).`;
+            alertBox.style.display = 'flex';
+            return;
+        }
+
+        alertBox.style.display = 'none';
+        activeLegData = { desc: descInput, start: startValue };
+
+        document.getElementById('panel-start-state').style.display = 'none';
+        document.getElementById('panel-arrive-state').style.display = 'block';
+        document.getElementById('active-route-lbl').innerText = descInput;
+        
+        const statusTitle = document.getElementById('card-status-title');
+        statusTitle.style.color = "#eab308";
+        statusTitle.innerHTML = `<i data-lucide="truck"></i> <span>Traveling to Destination...</span>`;
+        lucide.createIcons();
+    }
+
+    function executeArriveLeg() {
+        const endValue = parseInt(document.getElementById('odo-end').value);
+        const alertBox = document.getElementById('validation-alert');
+        const alertTxt = document.getElementById('error-text');
+
+        if (isNaN(endValue) || !photoStatus["cam-end"]) {
+            alertTxt.innerText = "Validation Error: Provide closing odometer metrics and termination proof snapshot.";
+            alertBox.style.display = 'flex';
+            return;
+        }
+
+        if (endValue <= activeLegData.start) {
+            alertTxt.innerText = `Validation Error: Metrics must exceed launch baseline numbers (${activeLegData.start} KM).`;
+            alertBox.style.display = 'flex';
+            return;
+        }
+
+        alertBox.style.display = 'none';
+        activeLegData.end = endValue;
+        activeLegData.delta = endValue - activeLegData.start;
+        loggedLegsArray.push(activeLegData);
+
+        renderLegTimelineView();
+
+        document.getElementById('odo-start').value = endValue; 
+        document.getElementById('trip-desc').value = "";
+        document.getElementById('odo-end').value = "";
+        
+        photoStatus["cam-start"] = false;
+        photoStatus["cam-end"] = false;
+        document.getElementById('cam-start').className = "camera-slot";
+        document.getElementById('cam-start').innerHTML = `<i data-lucide="camera" size="20"></i> <span>Snap Odometer Startup Proof</span>`;
+        document.getElementById('cam-end').className = "camera-slot";
+        document.getElementById('cam-end').innerHTML = `<i data-lucide="camera" size="20"></i> <span>Snap Destination Odometer Proof</span>`;
+
+        document.getElementById('panel-arrive-state').style.display = 'none';
+        document.getElementById('panel-start-state').style.display = 'block';
+        
+        const statusTitle = document.getElementById('card-status-title');
+        statusTitle.style.color = "var(--primary-blue)";
+        statusTitle.innerHTML = `<i data-lucide="navigation" size="16"></i> <span>Start New Trip Leg</span>`;
+        
+        activeLegData = null;
+        lucide.createIcons();
+    }
+
+    function renderLegTimelineView() {
+        const container = document.getElementById('timeline-box');
+        const emptyMsg = document.getElementById('empty-history-msg');
+        if (emptyMsg) emptyMsg.remove();
+
+        container.innerHTML = "";
+        loggedLegsArray.forEach((leg, index) => {
+            const row = document.createElement('div');
+            row.className = "timeline-item";
+            row.innerHTML = `
+                <div>
+                    <div class="timeline-meta">Leg ${index + 1}: ${leg.desc}</div>
+                    <div style="font-size:11px; color: var(--text-muted);">${leg.start} KM ➔ ${leg.end} KM</div>
+                </div>
+                <div class="timeline-dist">+${leg.delta} KM</div>
+            `;
+            container.appendChild(row);
+        });
+    }
+
+    function finalizeEntireJourney() {
+        if (loggedLegsArray.length === 0) {
+            const alertBox = document.getElementById('validation-alert');
+            alertBox.querySelector('#error-text').innerText = "Constraint Alert: Add tracking segments before opening billing blocks.";
+            alertBox.style.display = 'flex';
+            return;
+        }
+        document.getElementById('tracking-card').style.display = 'none';
+        document.getElementById('finish-journey-trigger').style.display = 'none';
+        document.getElementById('validation-alert').style.display = 'none';
+        document.getElementById('field-bill-card').style.display = 'block';
+    }
+
+    function addNewFieldBillRow() {
+        temporaryBillCounter++;
+        const repo = document.getElementById('bill-upload-repository');
+        const billRow = document.createElement('div');
+        billRow.className = "expense-row";
+        billRow.id = `bill-row-${temporaryBillCounter}`;
+        billRow.innerHTML = `
+            <select class="form-control" style="flex:2; padding:8px;">
+                <option>Toll Charges</option>
+                <option>Parking Fees</option>
+                <option>Fuel / Petrol Receipt</option>
+            </select>
+            <input type="number" class="form-control" style="flex:1; padding:8px;" placeholder="Value">
+            <button id="cam-bill-${temporaryBillCounter}" onclick="simulateBillAttachment(${temporaryBillCounter})" style="border:1px solid var(--border-color); background:white; padding:8px; border-radius:8px; cursor:pointer; color:var(--text-muted);">
+                <i data-lucide="camera" size="16"></i>
+            </button>
+        `;
+        repo.appendChild(billRow);
+        lucide.createIcons();
+    }
+
+    function simulateBillAttachment(rowNum) {
+        const btn = document.getElementById(`cam-bill-${rowNum}`);
+        btn.style.backgroundColor = "#d1fae5";
+        btn.style.color = "var(--success-green)";
+        btn.style.borderColor = "var(--success-green)";
+        btn.innerHTML = `<i data-lucide="check" size="16"></i>`;
+        lucide.createIcons();
+    }
+
+    function submitCompleteLogPacket() {
+        alert("Success! Shift segments, verification timeline datasets, and field expenses consolidated and dispatched.");
+        window.location.reload();
+    }
+</script>
+</body>
+</html>

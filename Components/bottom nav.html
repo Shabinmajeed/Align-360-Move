@@ -9,8 +9,9 @@
         :root {
             --bg-color: #f0f2f5;
             --nav-bg: #ffffff;
-            --active-blue: #3b82f6;
-            --inactive-gray: #8e8e93;
+            --active-blue: #1866ff;
+            --inactive-gray: #7d8bac;
+            --border-color: #e2e8f0;
         }
 
         body {
@@ -19,24 +20,13 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             height: 100vh;
+            position: relative;
         }
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: #7d8bac;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    width: 60px;
-  }
 
         /* Container for the Bottom Nav */
         .bottom-nav {
             position: fixed;
-            bottom: 20px; /* Floating style like your image */
+            bottom: 20px; /* Floating style */
             left: 25px;
             right: 25px;
             width: auto;
@@ -51,9 +41,6 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
-  .nav-item.active {
-    color: #1866ff;
-  }
 
         /* Individual Nav Item */
         .nav-item {
@@ -61,30 +48,29 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            gap: 4px;
             color: var(--inactive-gray);
-            transition: color 0.2s ease;
+            transition: all 0.2s ease;
             flex: 1;
+            width: 60px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
         }
-  .nav-item svg {
-    width: 22px;
-    height: 22px;
-    stroke: currentColor;
-    fill: none;
-    transition: transform 0.2s ease;
-  }
 
-        .nav-item i {
-            margin-bottom: 4px;
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            fill: none;
+            transition: transform 0.2s ease;
         }
-  .nav-item.active svg {
-    fill: currentColor;
-    stroke: currentColor;
-    transform: translateY(-2px);
-  }
 
         .nav-item span {
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         /* Active State */
@@ -92,7 +78,81 @@
             color: var(--active-blue);
         }
 
-        /* Content Area Padding so Nav doesn't cover text */
+        .nav-item.active svg {
+            fill: currentColor;
+            stroke: currentColor;
+            transform: translateY(-2px);
+        }
+
+        /* Floating 'More' Menu Panel Options */
+        .more-menu-panel {
+            position: fixed;
+            bottom: 85px; /* Sits cleanly right above the rounded nav bar */
+            left: 25px;
+            right: 25px;
+            margin: 0 auto;
+            max-width: 280px;
+            background-color: var(--nav-bg);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            
+            /* Hidden by default with smooth transitional parameters */
+            opacity: 0;
+            transform: translateY(15px) scale(0.95);
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .more-menu-panel.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .more-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .more-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .more-menu-item:hover, .more-menu-item:active {
+            background-color: #f8fafc;
+        }
+
+        .more-menu-item svg {
+            width: 18px;
+            height: 18px;
+            color: var(--inactive-gray);
+        }
+
+        /* Backdrop Overlay curtain to dim background and close menu when clicked outside */
+        .menu-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 998;
+            display: none;
+        }
+        .menu-overlay.visible {
+            display: block;
+        }
+
         .content {
             padding: 20px;
             padding-bottom: 100px; 
@@ -101,6 +161,23 @@
     </style>
 </head>
 <body>
+
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <div class="more-menu-panel" id="moreMenuPanel">
+        <a href="../Communications.html" class="more-menu-item">
+            <i data-lucide="mail"></i>
+            <span>Messages</span>
+        </a>
+        <a href="../Journey & Expense.html" class="more-menu-item">
+            <i data-lucide="car"></i>
+            <span>Journey & Expense</span>
+        </a>
+        <a href="../Daily Progress Report.html" class="more-menu-item">
+            <i data-lucide="file-check-2"></i>
+            <span>Daily Progress Report</span>
+        </a>
+    </div>
 
     <nav class="bottom-nav">
         <a href="../Home page.html" class="nav-item">
@@ -115,28 +192,11 @@
             <i data-lucide="calendar"></i>
             <span>Calendar</span>
         </a>
-        <a href="../Communications.html" class="nav-item">
-            <i data-lucide="mail"></i>
-            <span>Messages</span>
-        </a>
+        <button class="nav-item" id="moreMenuBtn">
+            <i data-lucide="menu"></i>
+            <span>More</span>
+        </button>
     </nav>
 
-    <script>
-        // Initialize Icons
-        lucide.createIcons();
-
-        // Dynamically highlight the active nav item based on the current page URL
-        const navItems = document.querySelectorAll('.nav-item');
-        const currentUrl = window.location.href;
-
-        navItems.forEach(item => {
-            const href = item.getAttribute('href');
-            const pageName = href.substring(href.lastIndexOf('/') + 1);
-            
-            if (currentUrl.includes(encodeURI(pageName)) || currentUrl.includes(pageName)) {
-                item.classList.add('active');
-            }
-        });
-    </script>
 </body>
 </html>
