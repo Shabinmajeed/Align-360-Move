@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FE Schedule - Approvals Pipeline</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #e0f2ff 0%, #f4f7f9 100%);
+            --card-bg: #ffffff;
+            --primary-blue: #3b82f6;
+            --soft-blue: #60a5fa;
+            --success-green: #10b981;
+            --error-red: #f87171;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-shell {
+            width: 100%;
+            max-width: 414px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn-square {
+            background: white;
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        .header-info h2 { font-size: 16px; color: var(--text-dark); font-weight: 700; }
+        .header-info p { font-size: 13px; color: var(--primary-blue); font-weight: 500; }
+
+        .main-content {
+            flex: 1;
+            padding: 0 20px;
+            overflow-y: auto;
+        }
+
+        /* Card Layouts */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .card-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        
+        .btn-view-all {
+            border: 1px solid var(--primary-blue);
+            color: var(--primary-blue);
+            background: transparent;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .progress-bar { height: 6px; background: #eee; border-radius: 10px; flex: 1; margin: 0 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary-blue); width: 100%; }
+
+        /* Approval Pipeline Cards */
+        .approval-node {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        .approval-node:last-child { margin-bottom: 0; }
+
+        .approval-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .node-icon-frame {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: #eff6ff;
+            color: var(--primary-blue);
+        }
+        
+        .passed .node-icon-frame {
+            background: #d1fae5;
+            color: var(--success-green);
+        }
+
+        .node-title h4 { font-size: 14px; color: var(--text-dark); font-weight: 700; }
+        .node-title p { font-size: 12px; color: var(--text-muted); }
+
+        .status-badge {
+            margin-left: auto;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #f1f5f9;
+            color: var(--text-muted);
+        }
+        .pending .status-badge { background: #fef3c7; color: #d97706; }
+        .passed .status-badge { background: #d1fae5; color: #065f46; }
+
+        /* Action Buttons */
+        .sign-action-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+        }
+        .sign-action-btn:hover { background: #2563eb; }
+
+        /* Chat System FAB */
+        .chat-fab {
+            position: absolute;
+            bottom: 120px;
+            right: 20px;
+            background: var(--primary-blue);
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+            cursor: pointer;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px; right: -5px;
+            background: var(--error-red);
+            color: white;
+            font-size: 10px;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid white;
+        }
+
+        /* Overlay Layout */
+        .chat-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .chat-overlay.active { display: flex; }
+        .overlay-content {
+            width: 100%;
+            max-width: 414px;
+            height: 80%;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            overflow: hidden;
+        }
+
+        footer {
+            background: white;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .footer-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-back { background: white; border: 1px solid #e2e8f0; color: var(--text-dark); }
+        .btn-complete { 
+            background: #cbd5e1; 
+            border: none; 
+            color: #64748b;
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .btn-complete.active-ready {
+            background: var(--success-green);
+            color: white;
+            opacity: 1;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-shell">
+    <header>
+        <button class="back-btn-square" onclick="window.location.href='../../Components/Task details.html'"><i data-lucide="chevron-left"></i></button>
+        <div class="header-info">
+            <h2>Device Install - Site Survey</h2>
+            <p>Infrastructure Schedule</p>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="card">
+            <div class="card-row">
+                <span style="font-weight: 600; color: var(--text-dark);">Step 6 of 6</span>
+                <button class="btn-view-all">
+                    <i data-lucide="list" size="16"></i> View Steps
+                </button>
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+                <span style="font-size: 14px; color: var(--primary-blue); font-weight: bold;" id="progress-text">100%</span>
+            </div>
+            <div style="display: flex; gap: 15px; font-size: 13px; color: var(--text-muted);">
+                <span><span style="color: var(--primary-blue);" id="dot-status">●</span> Ready for Submission</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="margin-bottom: 15px;">
+                <h3 style="font-size: 15px; color: var(--text-dark); font-weight: 700; margin-bottom: 4px;">Submit Deliverables</h3>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">Send your survey checklist and data for engineer verification via the external engineering portal.</p>
+            </div>
+
+            <div class="approval-node pending" id="node-eng">
+                <div class="approval-header">
+                    <div class="node-icon-frame" id="icon-eng"><i data-lucide="send" size="18"></i></div>
+                    <div class="node-title">
+                        <h4>Engineer Sign-off Queue</h4>
+                        <p id="desc-eng">Ready to submit site data package</p>
+                    </div>
+                    <span class="status-badge" id="badge-eng">Pending</span>
+                </div>
+                <button class="sign-action-btn" id="sign-eng-trigger">
+                    Submit for Engineer Sign-off <i data-lucide="arrow-right" size="14"></i>
+                </button>
+            </div>
+
+            <div class="approval-node" id="node-pm" style="background: #f8fafc; opacity: 0.7;">
+                <div class="approval-header">
+                    <div class="node-icon-frame" style="background: #e2e8f0; color: #64748b;"><i data-lucide="clock" size="18"></i></div>
+                    <div class="node-title">
+                        <h4>PM Approval Loop</h4>
+                        <p>Triggers post engineering sign-off</p>
+                    </div>
+                    <span class="status-badge">External</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-fab" onclick="document.getElementById('chatOverlay').classList.add('active')">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <div class="badge">1</div>
+    </div>
+
+    <div class="chat-overlay" id="chatOverlay" onclick="this.classList.remove('active')">
+        <div class="overlay-content" onclick="event.stopPropagation()">
+            <iframe src="../../Components/Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <button class="footer-btn btn-back" onclick="window.location.href='./task 1.5.html'">
+            Back
+        </button>
+        <button class="footer-btn btn-complete" id="complete-task-trigger">
+            Complete Task
+        </button>
+    </footer>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    const signEngTrigger = document.getElementById('sign-eng-trigger');
+    const nodeEng = document.getElementById('node-eng');
+    const badgeEng = document.getElementById('badge-eng');
+    const descEng = document.getElementById('desc-eng');
+    const progressText = document.getElementById('progress-text');
+    const dotStatus = document.getElementById('dot-status');
+    const completeTrigger = document.getElementById('complete-task-trigger');
+
+    signEngTrigger.addEventListener('click', function() {
+        nodeEng.classList.remove('pending');
+        nodeEng.classList.add('passed');
+        badgeEng.innerText = "Submitted";
+        descEng.innerText = "Sent to external validation portal";
+        signEngTrigger.style.display = 'none';
+
+        progressText.style.color = "var(--success-green)";
+        dotStatus.style.color = "var(--success-green)";
+
+        const iconContainer = document.getElementById('icon-eng');
+        iconContainer.innerHTML = '<i data-lucide="check"></i>';
+
+        completeTrigger.classList.add('active-ready');
+
+        lucide.createIcons();
+    });
+
+    completeTrigger.addEventListener('click', function() {
+        alert("Site Survey data packet successfully routed!");
+        window.location.href = '../../Task page.html';
+    });
+</script>
+
+</body>
+</html>

@@ -3,53 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Details Prototype</title>
+    <title>Task Details - Joint Visit with Emircom</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-blue: #2d6df6;
-            --bg-light: #f4f7fe;
-            --text-main: #1a1c1e;
-            --text-muted: #74777f;
+            --primary-blue: #3b82f6;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
             --card-white: #ffffff;
-            --escalated-red: #ff5252;
+            --border-color: #e2e8f0;
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #d0e2ff 0%, #f4f7fe 30%);
+            font-family: -apple-system, system-ui, sans-serif;
+            background: linear-gradient(180deg, #e0f2ff 0%, #f4f7f9 30%);
             display: flex;
             justify-content: center;
-            color: var(--text-main);
+            color: var(--text-dark);
+            height: 100vh;
         }
 
         .mobile-container {
             width: 100%;
-            max-width: 360px;
+            max-width: 414px;
             height: 100vh;
             background-color: var(--bg-light);
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
         }
 
         /* Top Bar */
         .app-header {
-            padding: 20px;
+            padding: 20px 20px 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .header-title { font-size: 1.5rem; font-weight: 700; }
-        .profile-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .header-title { font-size: 20px; font-weight: 700; }
 
         /* Navigation Row */
         .nav-row {
-            padding: 0 20px 20px;
+            padding: 10px 20px 20px;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -60,80 +60,74 @@
             border-radius: 12px;
             width: 44px;
             height: 44px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            color: var(--text-dark);
         }
 
         .task-header-info { flex-grow: 1; }
-        .task-title { font-size: 1.15rem; font-weight: 700; margin: 0; }
-        .project-name { color: var(--primary-blue); font-size: 0.95rem; font-weight: 500; }
-        .tag-escalated {
-            background: var(--escalated-red);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
+        .task-title { font-size: 20px; font-weight: 700; margin-bottom: 2px; line-height: 1.3; }
+        .project-name { color: var(--primary-blue); font-size: 14px; font-weight: 600; }
 
         /* Main Content Card */
         .details-card {
             background: var(--card-white);
-            margin: 0 15px;
-            border-radius: 16px;
+            margin: 0 20px;
+            border-radius: 20px;
             flex-grow: 1;
             padding: 24px;
             overflow-y: auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
         /* Progress Section */
         .progress-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
-        .progress-label { font-weight: 700; }
-        .progress-count { color: var(--primary-blue); font-size: 0.9rem; font-weight: 600; }
+        .progress-label { font-weight: 700; font-size: 14px; }
+        .progress-count { color: var(--primary-blue); font-size: 14px; font-weight: 600; }
         
         .progress-bar-bg {
-            background: #e1e2ec;
-            height: 8px;
+            background: #eee;
+            height: 6px;
             border-radius: 10px;
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            overflow: hidden;
         }
         .progress-bar-fill {
             background: var(--primary-blue);
             height: 100%;
             border-radius: 10px;
-            width: 81%; /* 9 of 11 */
+            width: 0%;
         }
 
         /* Info Groups */
-        .info-group { display: flex; gap: 15px; margin-bottom: 24px; }
-        .info-icon { opacity: 0.4; margin-top: 3px; }
-        .info-label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 4px; }
-        .info-value { font-weight: 500; line-height: 1.4; }
-        .map-link { color: var(--primary-blue); text-decoration: none; font-size: 0.9rem; font-weight: 600; display: block; margin-top: 8px; }
+        .info-group { display: flex; gap: 15px; margin-bottom: 20px; }
+        .info-icon { font-size: 18px; margin-top: 2px; }
+        .info-label { color: var(--text-muted); font-size: 11px; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        .info-value { font-weight: 500; font-size: 14px; line-height: 1.4; }
+        .map-link { color: var(--primary-blue); text-decoration: none; font-size: 13px; font-weight: 600; display: block; margin-top: 4px; }
 
-        .divider { height: 1px; background: #eee; margin: 20px 0; }
+        .divider { height: 1px; background: #f1f5f9; margin: 20px 0; }
 
-        .section-title { font-weight: 700; margin-bottom: 12px; }
-        .section-text { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+        .section-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text-dark); }
+        .section-text { color: var(--text-muted); line-height: 1.5; font-size: 13px; }
 
         /* Floating Chat Button */
         .chat-fab {
             position: absolute;
-            bottom: 110px;
-            right: 25px;
-            background: #6c93f8;
-            width: 60px;
-            height: 60px;
+            bottom: 120px;
+            right: 20px;
+            background: var(--primary-blue);
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(108, 147, 248, 0.4);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
             cursor: pointer;
             z-index: 100;
         }
@@ -151,7 +145,7 @@
         .chat-overlay.active { display: flex; }
         .overlay-content {
             width: 100%;
-            max-width: 360px;
+            max-width: 414px;
             height: 80%;
             background: white;
             border-radius: 24px 24px 0 0;
@@ -159,13 +153,14 @@
         }
         .badge {
             position: absolute;
-            top: 0;
-            right: 0;
-            background: #ff5252;
+            top: -5px;
+            right: -5px;
+            background: #f87171;
             color: white;
-            font-size: 0.7rem;
-            width: 20px;
-            height: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -177,6 +172,7 @@
         .footer-action {
             padding: 20px;
             background: white;
+            border-top: 1px solid #f1f5f9;
         }
         .resume-btn {
             background: var(--primary-blue);
@@ -185,9 +181,10 @@
             padding: 16px;
             border: none;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
     </style>
 </head>
@@ -195,25 +192,23 @@
 
 <div class="mobile-container">
     <header class="app-header">
-        <span class="header-title">Tasks</span>
-        <img src="https://i.imgur.com/8Km9tLL.png" alt="Profile" class="profile-img">
+        <span class="header-title">Task details</span>
     </header>
 
     <div class="nav-row">
-        <button class="back-btn">
+        <button class="back-btn" onclick="window.location.href='../../Task page.html'">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         <div class="task-header-info">
-            <h2 class="task-title">Turbine Inspection</h2>
-            <span class="project-name">Project Alpha</span>
+            <h2 class="task-title">4. Joint Visit with Emircom</h2>
+            <span class="project-name">Infrastructure Schedule</span>
         </div>
-        <div class="tag-escalated">🚩 Escalated</div>
     </div>
 
     <main class="details-card">
         <div class="progress-header">
             <span class="progress-label">Progress</span>
-            <span class="progress-count">9 of 11 completed</span>
+            <span class="progress-count">0 of 4 completed</span>
         </div>
         <div class="progress-bar-bg">
             <div class="progress-bar-fill"></div>
@@ -222,52 +217,51 @@
         <div class="info-group">
             <div class="info-icon">📍</div>
             <div>
-                <div class="info-label">Location</div>
-                <div class="info-value">Wind Farm Site A, North Sector Unit 7</div>
-                <a href="#" class="map-link">View on Map</a>
+                <div class="info-label">Meeting Location</div>
+                <div class="info-value">Main Datacenter, Security Gate 2 Staging Area</div>
+                <a href="#" class="map-link">View Facility Access Map</a>
             </div>
         </div>
 
         <div class="info-group">
             <div class="info-icon">📅</div>
             <div>
-                <div class="info-label">Date</div>
-                <div class="info-value">24/09/2021</div>
+                <div class="info-label">Scheduled Date</div>
+                <div class="info-value">20/05/2026 (09:00 AM - 12:00 PM)</div>
             </div>
         </div>
 
         <div class="info-group">
-            <div class="info-icon">👤</div>
+            <div class="info-icon">👥</div>
             <div>
-                <div class="info-label">Assigned By</div>
-                <div class="info-value">John Manager</div>
+                <div class="info-label">External Partner</div>
+                <div class="info-value">Emircom Integration Engineering Team</div>
             </div>
         </div>
 
         <div class="divider"></div>
 
         <div class="section-title">Description</div>
-        <p class="section-text">Perform regular safety audit and blade structural integrity check.</p>
+        <p class="section-text">Conduct the mandatory multi-party field evaluation alongside vendor partner integrators from Emircom. This alignment sync requires cross-referencing visitor datacenter permits, walking through deployed physical racking milestones, checking third-party loop deliverables, and logging joint verification signs.</p>
 
         <div class="divider"></div>
 
-        <div class="section-title">Requirements</div>
-        <p class="section-text">Ensure lubrication system is functioning properly. Check for any visible damage or wear. Document all findings with photographs.</p>
+        <div class="section-title">Coordination Milestone Steps</div>
+        <p class="section-text">1. Permits & Identity Validation<br>2. Physical Deployment Walkthrough<br>3. Handover Integration Checklist<br>4. Submit for Joint Engineering Review</p>
     </main>
 
     <div class="chat-fab" onclick="document.getElementById('chatOverlay').classList.add('active')">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        <div class="badge">3</div>
+        <div class="badge">1</div>
     </div>
 
     <footer class="footer-action">
-        <button class="resume-btn">Resume Task</button>
+        <button onclick="window.location.href='../../Taskwizard/04 Joint visit/task 4.1.html'" class="resume-btn">Start Joint Visit</button>
     </footer>
 
-    <!-- Chat Overlay Container -->
     <div class="chat-overlay" id="chatOverlay" onclick="this.classList.remove('active')">
         <div class="overlay-content" onclick="event.stopPropagation()">
-            <iframe src="Task details.html" style="width: 100%; height: 100%; border: none;"></iframe>
+            <iframe src="../Components/Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
     </div>
 </div>

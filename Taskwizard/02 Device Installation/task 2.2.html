@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turbine Inspection Prototype</title>
+    <title>FE Schedule - Device Installation</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
@@ -14,6 +14,7 @@
             --error-red: #f87171;
             --text-dark: #1e293b;
             --text-muted: #64748b;
+            --border-color: #e2e8f0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,7 +27,6 @@
             justify-content: center;
         }
 
-        /* Phone Container Emulation */
         .phone-shell {
             width: 100%;
             max-width: 414px;
@@ -37,7 +37,6 @@
             box-shadow: 0 0 40px rgba(0,0,0,0.1);
         }
 
-        /* --- Header Section --- */
         header {
             padding: 20px;
             display: flex;
@@ -54,29 +53,16 @@
             cursor: pointer;
         }
 
-        .header-info h2 { font-size: 18px; color: var(--text-dark); }
-        .header-info p { font-size: 14px; color: var(--primary-blue); font-weight: 500; }
+        .header-info h2 { font-size: 16px; color: var(--text-dark); font-weight: 700; }
+        .header-info p { font-size: 13px; color: var(--primary-blue); font-weight: 500; }
 
-        .escalated-badge {
-            margin-left: auto;
-            background: #ff5f5f;
-            color: white;
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* --- Main Content Area --- */
         .main-content {
             flex: 1;
             padding: 0 20px;
             overflow-y: auto;
         }
 
-        /* Progress Card (from previous step) */
+        /* Card Layouts */
         .card {
             background: white;
             border-radius: 20px;
@@ -95,36 +81,48 @@
             border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
-            position: relative;
             display: flex;
             align-items: center;
             gap: 5px;
-        }
-
-        .badge {
-            position: absolute;
-            top: -8px; right: -8px;
-            background: var(--error-red);
-            color: white;
-            font-size: 10px;
-            width: 18px; height: 18px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            border: 2px solid white;
+            cursor: pointer;
         }
 
         .progress-bar { height: 6px; background: #eee; border-radius: 10px; flex: 1; margin: 0 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--primary-blue); width: 9%; }
+        .progress-fill { height: 100%; background: var(--primary-blue); width: 28.5%; }
 
-        /* Question Section */
-        .question-title { font-size: 16px; color: var(--text-dark); margin-bottom: 10px; }
-        .question-desc { font-size: 14px; color: var(--text-muted); line-height: 1.4; margin-bottom: 20px; }
+        /* Input Form Elements */
+        .question-block {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .question-block:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
 
-        .binary-options { display: flex; gap: 15px; }
+        .question-title { font-size: 15px; color: var(--text-dark); margin-bottom: 6px; line-height: 1.4; font-weight: 600; }
+        .question-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px; }
+
+        /* Dropdown/Select Styling */
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background-color: white;
+            color: var(--text-dark);
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* Binary Option Button Layouts */
+        .binary-options { display: flex; gap: 12px; }
         .option-btn {
             flex: 1;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
+            padding: 11px;
+            border: 1px solid var(--border-color);
             background: white;
             border-radius: 10px;
             display: flex;
@@ -135,6 +133,7 @@
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.2s ease;
+            font-size: 14px;
         }
 
         .option-btn.selected {
@@ -146,13 +145,13 @@
         .error-msg {
             color: var(--error-red);
             font-size: 13px;
-            margin-top: 15px;
-            display: flex;
+            margin: 10px 0 20px 0;
+            display: none;
             align-items: center;
             gap: 5px;
         }
 
-        /* --- Floating Chat --- */
+        /* Chat System FAB */
         .chat-fab {
             position: absolute;
             bottom: 120px;
@@ -163,9 +162,22 @@
             display: flex; align-items: center; justify-content: center;
             color: white;
             box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+            cursor: pointer;
         }
 
-        /* Overlay Styles */
+        .badge {
+            position: absolute;
+            top: -5px; right: -5px;
+            background: var(--error-red);
+            color: white;
+            font-size: 10px;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid white;
+        }
+
+        /* Overlay Layout */
         .chat-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -185,7 +197,6 @@
             overflow: hidden;
         }
 
-        /* --- Footer Section --- */
         footer {
             background: white;
             padding: 20px;
@@ -209,10 +220,10 @@
 
         .btn-back { background: white; border: 1px solid #e2e8f0; color: var(--text-dark); }
         .btn-next { 
-            background: linear-gradient(90deg, #93c5fd, #60a5fa); 
+            background: var(--primary-blue); 
             border: none; 
             color: white;
-            box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
     </style>
 </head>
@@ -220,70 +231,74 @@
 
 <div class="phone-shell">
     <header>
-        <button class="back-btn-square"><i data-lucide="chevron-left"></i></button>
+        <button class="back-btn-square" onclick="window.location.href='../../Components/Task Details/02 Device installation.html'"><i data-lucide="chevron-left"></i></button>
         <div class="header-info">
-            <h2>Turbine Inspection</h2>
-            <p>Project Alpha</p>
-        </div>
-        <div class="escalated-badge">
-            <i data-lucide="flag" size="12"></i> Escalated
+            <h2>2. Device Installation</h2>
+            <p>Infrastructure Schedule</p>
         </div>
     </header>
 
     <div class="main-content">
         <div class="card">
             <div class="card-row">
-                <span style="font-weight: 600;">Step 1 of 11</span>
+                <span style="font-weight: 600; color: var(--text-dark);">Step 2 of 7</span>
                 <button class="btn-view-all">
-                    <i data-lucide="list" size="16"></i> View All
-                    <span class="badge">10</span>
+                    <i data-lucide="list" size="16"></i> View Steps
                 </button>
             </div>
-            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
                 <div class="progress-bar"><div class="progress-fill"></div></div>
-                <span style="font-size: 14px; color: #94a3b8; font-weight: bold;">9%</span>
+                <span style="font-size: 14px; color: #94a3b8; font-weight: bold;">29%</span>
             </div>
             <div style="display: flex; gap: 15px; font-size: 13px; color: var(--text-muted);">
-                <span><span style="color: #10b981;">●</span> 0 answered</span>
-                <span><span style="color: #f87171;">●</span> 10 required</span>
+                <span><span style="color: #3b82f6;">●</span> Power Availability Check</span>
             </div>
         </div>
 
         <div class="card">
-            <h3 class="question-title">Is the turbine blade free from visible cracks or damage? <span style="color: var(--error-red);">*</span></h3>
-            <p class="question-desc">Visually inspect the entire blade surface for any signs of structural damage.</p>
-            
-            <div class="binary-options">
-                <button class="option-btn"><i data-lucide="check" size="18"></i> Yes</button>
-                <button class="option-btn"><i data-lucide="x" size="18"></i> No</button>
+            <div class="question-block">
+                <h3 class="question-title">Are both PDU feeds verified active? <span style="color: var(--error-red);">*</span></h3>
+                <p class="question-desc">Measure and check both independent A and B primary circuit lines via terminal multimeters.</p>
+                <div class="binary-options">
+                    <button class="option-btn" data-q="dual-live"><i data-lucide="zap" size="16"></i> Both Drops Active</button>
+                    <button class="option-btn" data-q="dual-live"><i data-lucide="zap-off" size="16"></i> Faulty / Single Drop</button>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3 class="question-title">Cabinet Breaker Rating Capacity <span style="color: var(--error-red);">*</span></h3>
+                <p class="question-desc">Match existing circuit threshold capacities to hardware baseline requirements.</p>
+                <select class="form-select" id="breaker-capacity">
+                    <option value="" disabled selected>Select active breaker limit...</option>
+                    <option value="16a">16 Amp Single-Phase</option>
+                    <option value="32a">32 Amp Single-Phase</option>
+                    <option value="3 phase">32 Amp Three-Phase</option>
+                </select>
             </div>
         </div>
 
-        <div class="error-msg">
+        <div class="error-msg" id="form-validation-error">
             <i data-lucide="alert-circle" size="16"></i>
-            Please answer this mandatory question to continue
+            Please verify drop visibility states and log breaker thresholds.
         </div>
     </div>
 
-     <div class="chat-fab" onclick="document.getElementById('chatOverlay').classList.add('active')">
+    <div class="chat-fab" onclick="document.getElementById('chatOverlay').classList.add('active')">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        <div class="badge">3</div>
+        <div class="badge">1</div>
     </div>
 
-    
-
-    <!-- Chat Overlay Container -->
     <div class="chat-overlay" id="chatOverlay" onclick="this.classList.remove('active')">
         <div class="overlay-content" onclick="event.stopPropagation()">
-            <iframe src="../Components/Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
+            <iframe src="../../Components/Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
     </div>
 
     <footer>
-        <button class="footer-btn btn-back">
-            <i data-lucide="chevron-left" size="20"></i> Back
+        <button class="footer-btn btn-back" onclick="window.location.href='./task 2.1.html'">
+            Back
         </button>
-        <button class="footer-btn btn-next">
+        <button class="footer-btn btn-next" id="next-step-trigger">
             Next <i data-lucide="chevron-right" size="20"></i>
         </button>
     </footer>
@@ -293,12 +308,31 @@
     lucide.createIcons();
 
     const optionBtns = document.querySelectorAll('.option-btn');
+    const errorMsg = document.getElementById('form-validation-error');
+    const selectBreaker = document.getElementById('breaker-capacity');
+
     optionBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            const parent = this.closest('.binary-options');
-            parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            const groupName = this.getAttribute('data-q');
+            document.querySelectorAll(`.option-btn[data-q="${groupName}"]`).forEach(b => b.classList.remove('selected'));
             this.classList.add('selected');
+            errorMsg.style.display = 'none';
         });
+    });
+
+    selectBreaker.addEventListener('change', () => {
+        errorMsg.style.display = 'none';
+    });
+
+    document.getElementById('next-step-trigger').addEventListener('click', function() {
+        const buttonSelected = document.querySelectorAll('.option-btn.selected').length > 0;
+        const selectFilled = selectBreaker.value !== "";
+        
+        if (!buttonSelected || !selectFilled) {
+            errorMsg.style.display = 'flex';
+        } else {
+            window.location.href = './task 2.3.html';
+        }
     });
 </script>
 

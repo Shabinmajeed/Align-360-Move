@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Details Prototype</title>
+    <title>Task Details - Device Installation</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -83,7 +83,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
-        /* Progress Section */
+        /* Progress Section - Calibrated for 10 actions */
         .progress-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
         .progress-label { font-weight: 700; font-size: 14px; }
         .progress-count { color: var(--primary-blue); font-size: 14px; font-weight: 600; }
@@ -196,11 +196,11 @@
     </header>
 
     <div class="nav-row">
-        <button class="back-btn" onclick="window.location.href='../Task page.html'">
+        <button class="back-btn" onclick="window.location.href='../../Task page.html'">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         <div class="task-header-info">
-            <h2 class="task-title"> Site Survey</h2>
+            <h2 class="task-title">2. Device Installation</h2>
             <span class="project-name">Infrastructure Schedule</span>
         </div>
     </div>
@@ -208,7 +208,7 @@
     <main class="details-card">
         <div class="progress-header">
             <span class="progress-label">Progress</span>
-            <span class="progress-count">0 of 6 completed</span>
+            <span class="progress-count">0 of 7 completed</span>
         </div>
         <div class="progress-bar-bg">
             <div class="progress-bar-fill"></div>
@@ -219,7 +219,7 @@
             <div>
                 <div class="info-label">Location</div>
                 <div class="info-value">Main Datacenter, Room 4B, Rack Row G</div>
-                <a href="#" class="map-link">View Floor Plan Map</a>
+                <a href="#" class="map-link">View Rack Elevations Map</a>
             </div>
         </div>
 
@@ -227,7 +227,7 @@
             <div class="info-icon">📅</div>
             <div>
                 <div class="info-label">Schedule Date</div>
-                <div class="info-value">17/05/2026</div>
+                <div class="info-value">18/05/2026</div>
             </div>
         </div>
 
@@ -242,12 +242,12 @@
         <div class="divider"></div>
 
         <div class="section-title">Description</div>
-        <p class="section-text">Execute full physical documentation and infrastructure capability validation ahead of enterprise device mounting procedures.</p>
+        <p class="section-text">Perform the end-to-end hardware deployment sequence. This includes cross-referencing site survey constraints, secure chassis unboxing/mounting, establishing power loop redundancy feeds, line diagnostic tests, and port troubleshooting validation routines.</p>
 
         <div class="divider"></div>
 
-        <div class="section-title">Core Requirements</div>
-        <p class="section-text">Verify cabinet structural metrics, validate isolated backup power redundancy loops, evaluate airflow clearance metrics, and file structured survey asset outputs.</p>
+        <div class="section-title">Execution Steps Summary</div>
+        <p class="section-text">1. Survey Results Review<br>2. Power Allocation Clearance<br>3. Physical Device Hardware Mount<br>4. Unit Power Up Boot Verification<br>5. Design Connectivity Cross-Check<br>6. Interface/Port Up Troubleshooting<br>7. Rack, Asset, & Cable Labeling<br>8. Site Evidence Photography<br>9. Engineering Validation Review<br>10. PM Sign-off Routing</p>
     </main>
 
     <div class="chat-fab" onclick="document.getElementById('chatOverlay').classList.add('active')">
@@ -256,12 +256,12 @@
     </div>
 
     <footer class="footer-action">
-        <button onclick="window.location.href='./task 1.1.html'" class="resume-btn">Start Task</button>
+        <button onclick="window.location.href='../../Taskwizard/02 Device Installation/task 2.1.html'" class="resume-btn">Start Task</button>
     </footer>
 
     <div class="chat-overlay" id="chatOverlay" onclick="this.classList.remove('active')">
         <div class="overlay-content" onclick="event.stopPropagation()">
-            <iframe src="Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
+            <iframe src="../Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
     </div>
 </div>

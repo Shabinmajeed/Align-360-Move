@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FE Schedule - Joint Vendor Visit</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #e0f2ff 0%, #f4f7f9 100%);
+            --card-bg: #ffffff;
+            --primary-blue: #3b82f6;
+            --soft-blue: #60a5fa;
+            --error-red: #f87171;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-shell {
+            width: 100%;
+            max-width: 414px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn-square {
+            background: white;
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        .header-info h2 { font-size: 16px; color: var(--text-dark); font-weight: 700; }
+        .header-info p { font-size: 13px; color: var(--primary-blue); font-weight: 500; }
+
+        .main-content {
+            flex: 1;
+            padding: 0 20px;
+            overflow-y: auto;
+        }
+
+        /* Card Layouts */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .card-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        
+        .btn-view-all {
+            border: 1px solid var(--primary-blue);
+            color: var(--primary-blue);
+            background: transparent;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .progress-bar { height: 6px; background: #eee; border-radius: 10px; flex: 1; margin: 0 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary-blue); width: 75%; }
+
+        /* Input Form Elements */
+        .question-block {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .question-block:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .question-title { font-size: 15px; color: var(--text-dark); margin-bottom: 6px; line-height: 1.4; font-weight: 600; }
+        .question-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px; }
+
+        /* Binary Option Button Layouts */
+        .binary-options { display: flex; gap: 12px; }
+        .option-btn {
+            flex: 1;
+            padding: 11px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .option-btn.selected {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .error-msg {
+            color: var(--error-red);
+            font-size: 13px;
+            margin: 10px 0 20px 0;
+            display: none;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Chat System FAB */
+        .chat-fab {
+            position: absolute;
+            bottom: 120px;
+            right: 20px;
+            background: var(--primary-blue);
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+            cursor: pointer;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px; right: -5px;
+            background: var(--error-red);
+            color: white;
+            font-size: 10px;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid white;
+        }
+
+        /* Overlay Layout */
+        .chat-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .chat-overlay.active { display: flex; }
+        .overlay-content {
+            width: 100%;
+            max-width: 414px;
+            height: 80%;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            overflow: hidden;
+        }
+
+        footer {
+            background: white;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .footer-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-back { background: white; border: 1px solid #e2e8f0; color: var(--text-dark); }
+        .btn-next { 
+            background: var(--primary-blue); 
+            border: none; 
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-shell">
+    <header>
+        <button class="back-btn-square" onclick="window.location.href='../../Components/Task Details/04 joint visit.html'"><i data-lucide="chevron-left"></i></button>
+        <div class="header-info">
+            <h2>4. Joint Visit with Emircom</h2>
+            <p>Infrastructure Schedule</p>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="card">
+            <div class="card-row">
+                <span style="font-weight: 600; color: var(--text-dark);">Step 3 of 4</span>
+                <button class="btn-view-all">
+                    <i data-lucide="list" size="16"></i> View Steps
+                </button>
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+                <span style="font-size: 14px; color: #94a3b8; font-weight: bold;">75%</span>
+            </div>
+            <div style="display: flex; gap: 15px; font-size: 13px; color: var(--text-muted);">
+                <span><span style="color: #3b82f6;">●</span> Handover Integration Checklist</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="question-block">
+                <h3 class="question-title">Vendor deliverables complete? <span style="color: var(--error-red);">*</span></h3>
+                <p class="question-desc">Confirm that all specific technical scopes assigned to the Emircom team have been executed, tested, and run without pending parameters.</p>
+                <div class="binary-options">
+                    <button class="option-btn" data-q="vendor-done"><i data-lucide="check-square" size="16"></i> Fully Complete</button>
+                    <button class="option-btn" data-q="vendor-done"><i data-lucide="alert-circle" size="16"></i> Punch List Open</button>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h3 class="question-title">Operational data loop accepted? <span style="color: var(--error-red);">*</span></h3>
+                <p class="question-desc">Verify that all deployment asset logs, wiring paths, and testing logs have been successfully handed over and signed off by both field parties.</p>
+                <div class="binary-options">
+                    <button class="option-btn" data-q="handshake-ok"><i data-lucide="handshake" size="16"></i> Handshake Accepted</button>
+                    <button class="option-btn" data-q="handshake-ok"><i data-lucide="x" size="16"></i> Disagreement Logged</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="error-msg" id="form-validation-error">
+            <i data-lucide="alert-circle" size="16"></i>
+            Please verify vendor deliverables and confirm operational data handshakes.
+        </div>
+    </div>
+
+    <div class="chat-fab" onclick="document.getElementById('chatOverlay').classList.add('active')">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <div class="badge">1</div>
+    </div>
+
+    <div class="chat-overlay" id="chatOverlay" onclick="this.classList.remove('active')">
+        <div class="overlay-content" onclick="event.stopPropagation()">
+            <iframe src="../../Components/Float Chat.html" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <button class="footer-btn btn-back" onclick="window.location.href='./task 4.2.html'">
+            Back
+        </button>
+        <button class="footer-btn btn-next" id="next-step-trigger">
+            Next <i data-lucide="chevron-right" size="20"></i>
+        </button>
+    </footer>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    const optionBtns = document.querySelectorAll('.option-btn');
+    const errorMsg = document.getElementById('form-validation-error');
+
+    optionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const groupName = this.getAttribute('data-q');
+            document.querySelectorAll(`.option-btn[data-q="${groupName}"]`).forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            errorMsg.style.display = 'none';
+        });
+    });
+
+    document.getElementById('next-step-trigger').addEventListener('click', function() {
+        const selectedButtons = document.querySelectorAll('.option-btn.selected').length;
+        
+        if (selectedButtons < 2) {
+            errorMsg.style.display = 'flex';
+        } else {
+            window.location.href = './task 4.4.html';
+        }
+    });
+</script>
+
+</body>
+</html>
