@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Align 360 Move — Dashboard</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(180deg, #e0f2ff 0%, #f4f7f9 100%);
+      --card-bg: #ffffff;
+      --primary-blue: #1866ff;
+      --soft-blue: #eff6ff;
+      --warning-amber: #f59e0b;
+      --success-green: #10b981;
+      --error-red: #f87171;
+      --text-dark: #1e293b;
+      --text-muted: #7d8bac;
+      --border-color: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f0f2f5;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Fixed mobile view chassis frame matching your exact layout specifications */
+    .app-shell {
+      width: 100%;
+      max-width: 414px;
+      height: 100vh;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      overflow: hidden;
+    }
+
+    /* Top Personalized Header Section */
+    .home-header {
+      padding: 24px 20px 12px 20px;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .home-header h1 { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+    .home-header p { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+    
+    .profile-pic {
+      position: relative;
+      width: 44px; height: 44px;
+    }
+    .profile-pic img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .online-dot-avatar {
+      position: absolute; bottom: 1px; right: 1px;
+      width: 11px; height: 11px; background: var(--success-green);
+      border-radius: 50%; border: 2px solid white;
+    }
+
+    /* Connectivity Sync Ribbon */
+    .sync-status {
+      padding: 8px 20px; background: #f1f5f9;
+      border-bottom: 1px solid var(--border-color);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11px; font-weight: 600; color: #64748b;
+    }
+    .sync-left { display: flex; align-items: center; gap: 6px; }
+    .online-dot { width: 6px; height: 6px; background: var(--success-green); border-radius: 50%; }
+
+    /* Main Scrollable Dashboard Content */
+    .main-content {
+      flex: 1;
+      padding: 16px 20px;
+      overflow-y: auto;
+      padding-bottom: 110px; /* Buffer room so content clears the floating navigation chassis */
+    }
+
+    /* New Module: Active State-Aware Shift Lifecycle Widget */
+    .shift-widget {
+      background: white; border-radius: 20px; padding: 16px; margin-bottom: 16px;
+      border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+      transition: all 0.25s ease;
+    }
+    .shift-widget.active-drive { border-color: var(--warning-amber); background: #fffbeb; }
+    .widget-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .widget-icon-frame {
+      width: 36px; height: 36px; border-radius: 50%; background: var(--soft-blue);
+      color: var(--primary-blue); display: flex; align-items: center; justify-content: center;
+    }
+    .active-drive .widget-icon-frame { background: #fef3c7; color: var(--warning-amber); }
+    .widget-title h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+    .widget-title p { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+    
+    .widget-action-btn {
+      width: 100%; padding: 12px; border: none; border-radius: 12px; font-size: 13px;
+      font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: background-color 0.2s;
+    }
+    .btn-start-shift { background: var(--primary-blue); color: white; }
+    .btn-arrive-shift { background: var(--warning-amber); color: white; }
+
+    /* New Module: Quick Utility Action Micro Buttons Row */
+    .quick-actions-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
+    }
+    .quick-btn {
+      background: white; border: 1px solid var(--border-color); border-radius: 14px;
+      padding: 12px 8px; text-align: center; cursor: pointer; transition: all 0.2s;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .quick-btn:active { background: var(--soft-blue); border-color: var(--soft-blue); }
+    .quick-btn i { color: var(--text-dark); }
+    .quick-btn span { font-size: 11px; font-weight: 700; color: #475569; }
+
+    /* Structural Segment Header Rows */
+    .home-section-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    }
+    .home-section-header h3 { font-size: 14px; font-weight: 700; color: var(--text-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+    .link-show-all { font-size: 12px; color: var(--primary-blue); text-decoration: none; font-weight: 600; }
+
+    /* Toggle Alignment Switch Filter Tabs */
+    .toggle-tabs {
+      display: flex; background: #e2e8f0; padding: 4px; border-radius: 12px; margin-bottom: 14px;
+    }
+    .tab {
+      flex: 1; padding: 10px; border: none; background: transparent; border-radius: 10px;
+      font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .tab.active { background: white; color: var(--text-dark); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .badge-count { background: var(--error-red); color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700; }
+
+    /* Mock Carousel Container Matrix Styles */
+    .site-cards-container { margin-bottom: 10px; }
+    .site-card {
+      background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.01); cursor: pointer;
+    }
+    .site-card-meta { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center; }
+    .status-pill { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; background: #e0f2ff; color: var(--primary-blue); }
+    .site-card h4 { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .site-card p { font-size: 12px; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 4px; }
+
+    .pagination-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 24px; }
+    .pagination-dots .dot { width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; }
+    .pagination-dots .dot.active { width: 18px; background: var(--primary-blue); border-radius: 4px; }
+
+    /* Streamlined Messaging Row Layout Configurations */
+    .notification-alert-strip {
+      background: white; border: 1px solid var(--border-color); border-radius: 16px;
+      padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+    }
+    .notif-icon-box { color: var(--warning-amber); display: flex; align-items: center; }
+    .notif-body h5 { font-size: 13px; font-weight: 700; color: var(--text-dark); }
+    .notif-body p { font-size: 11px; color: var(--text-muted); margin-top: 1px; font-weight: 500; }
+
+    /* ========================================== */
+    /* FLOATING BOTTOM NAVIGATION BAR PROTOTYPE   */
+    /* ========================================== */
+    .bottom-nav {
+      position: fixed; bottom: 20px; left: 25px; right: 25px;
+      width: auto; margin: 0 auto; max-width: 320px;
+      background-color: white; display: flex; justify-content: space-around;
+      align-items: center; padding: 12px 0; border-radius: 40px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); z-index: 1000;
+    }
+    .nav-item {
+      text-decoration: none; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 4px;
+      color: var(--text-muted); transition: all 0.2s ease; flex: 1;
+      width: 60px; cursor: pointer; background: none; border: none; font-family: inherit;
+    }
+    .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; transition: transform 0.2s ease; }
+    .nav-item span { font-size: 12px; font-weight: 600; }
+    .nav-item.active { color: var(--primary-blue); }
+    .nav-item.active svg { fill: currentColor; stroke: currentColor; transform: translateY(-2px); }
+
+    /* More Floating Panel Drawer Overlays */
+    .more-menu-panel {
+      position: fixed; bottom: 85px; left: 25px; right: 25px;
+      margin: 0 auto; max-width: 280px; background-color: white;
+      border-radius: 20px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--border-color); overflow: hidden; z-index: 1001;
+      display: flex; flex-direction: column;
+      opacity: 0; transform: translateY(15px) scale(0.95); pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .more-menu-panel.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+    .more-menu-item {
+      display: flex; align-items: center; gap: 12px; padding: 14px 20px;
+      color: #1e293b; text-decoration: none; font-size: 14px; font-weight: 600;
+      transition: background-color 0.2s; border-bottom: 1px solid var(--border-color);
+    }
+    .more-menu-item:last-child { border-bottom: none; }
+    .more-menu-item:hover { background-color: #f8fafc; }
+    .more-menu-item svg { width: 18px; height: 18px; color: var(--text-muted); }
+
+    .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.1); z-index: 998; display: none; }
+    .menu-overlay.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="app-shell home-shell">
+    
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMoreMenu()"></div>
+
+    <header class="home-header">
+      <div>
+        <h1>Good morning, Alexa!</h1>
+        <p id="live-date-label">Monday, May 18, 2026</p>
+      </div>
+      <div class="profile-pic">
+        <img src="https://i.pravatar.cc/150?img=47" alt="Alexa Profile" />
+        <span class="online-dot-avatar"></span>
+      </div>
+    </header>
+
+    <div class="sync-status">
+      <div class="sync-left">
+        <span class="online-dot"></span>
+        <span>Online · All modifications synced</span>
+      </div>
+      <div class="sync-right">
+        <span>2 min ago</span>
+      </div>
+    </div>
+
+    <div class="main-content">
+      
+      <div class="shift-widget" id="shift-logistics-widget">
+        <div class="widget-header">
+          <div class="widget-icon-frame" id="shift-icon-frame">
+            <i data-lucide="car" size="18"></i>
+          </div>
+          <div class="widget-title">
+            <h4 id="shift-status-title">Logistics Status Idle</h4>
+            <p id="shift-status-desc">You haven't initialized travel runs today.</p>
+          </div>
+        </div>
+        <button class="widget-action-btn btn-start-shift" id="shift-widget-trigger" onclick="toggleWidgetShiftState()">
+          <span>Start Daily Journey</span> <i data-lucide="play" size="14"></i>
+        </button>
+      </div>
+
+      <div class="quick-actions-row">
+        <div class="quick-btn" onclick="alert('Launching Instant Receipt Upload Form...')">
+          <i data-lucide="receipt" size="18"></i>
+          <span>Log Expense</span>
+        </div>
+        <div class="quick-btn" onclick="alert('Opening Digital Kit Bag Allocation Balances...')">
+          <i data-lucide="package" size="18"></i>
+          <span>Stock Check</span>
+        </div>
+        <div class="quick-btn" onclick="location.href='./daily-report.html'">
+          <i data-lucide="file-check-2" size="18"></i>
+          <span>File DPR</span>
+        </div>
+      </div>
+
+      <div class="home-section-header">
+        <h3>Site Deployment View</h3>
+        <a href="../Task page.html" class="link-show-all">View All</a>
+      </div>
+
+      <div class="toggle-tabs">
+        <button class="tab active" onclick="alert('Displaying allocations filtered for current target shift...')">Today's Site</button>
+        <button class="tab" onclick="alert('Redirecting to scheduled workflow backlog queues...')">Scheduled <span class="badge-count">10</span></button>
+      </div>
+
+      <div class="site-cards-container">
+        <div class="site-card" onclick="location.href='../Task page.html'">
+          <div class="site-card-meta">
+            <span class="status-pill">Next Priority</span>
+            <span style="font-size:12px; font-weight:600; color:var(--text-muted);">ID: TSK-003</span>
+          </div>
+          <h4>Core Network Node DC-02</h4>
+          <p><i data-lucide="map-pin" size="14"></i> Row C to Row F Overhead Containments</p>
+          <p style="margin-top: 6px; color: var(--primary-blue); font-weight: 700;">
+            <i data-lucide="clock" size="14"></i> 10:00 AM - 01:00 PM
+          </p>
+        </div>
+      </div>
+
+      <div class="pagination-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+
+      <div class="home-section-header">
+        <h3>Broadcast Alerts & Messages</h3>
+      </div>
+      
+      <div class="notification-alert-strip" onclick="toggleMoreMenu()">
+        <div class="notif-icon-box">
+          <i data-lucide="alert-circle" size="20"></i>
+        </div>
+        <div class="notif-body">
+          <h5>DC-02 Structural Blockage Alert</h5>
+          <p>Row F overhead tray runs currently obstructed by ventilation systems...</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="more-menu-panel" id="moreMenuPanel">
+        <a href="../Communications.html" class="more-menu-item">
+            <i data-lucide="mail"></i>
+            <span>Messages</span>
+        </a>
+        <a href="./trip-tracker-sandbox.html" class="more-menu-item">
+            <i data-lucide="car"></i>
+            <span>Journey & Expense</span>
+        </a>
+        <a href="./daily-report.html" class="more-menu-item">
+            <i data-lucide="file-check-2"></i>
+            <span>Daily Progress Report</span>
+        </a>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="../Task page.html" class="nav-item">
+            <i data-lucide="layout-grid"></i>
+            <span>Task</span>
+        </a>
+        <a href="../Calendar.html" class="nav-item">
+            <i data-lucide="calendar"></i>
+            <span>Calendar</span>
+        </a>
+        <button class="nav-item" id="moreMenuBtn" onclick="toggleMoreMenu()">
+            <i data-lucide="menu"></i>
+            <span>More</span>
+        </button>
+    </nav>
+</div>
+
+<script>
+    // Initialize Lucide Icons Vector Matrix render engine
+    lucide.createIcons();
+
+    // Variable definitions for state tracking parameters
+    let isJourneyActive = false; 
+    const moreMenuPanel = document.getElementById('moreMenuPanel');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    // Dynamic shift tracker widget state modifier loop
+    function toggleWidgetShiftState() {
+      const widget = document.getElementById('shift-logistics-widget');
+      const iconFrame = document.getElementById('shift-icon-frame');
+      const title = document.getElementById('shift-status-title');
+      const desc = document.getElementById('shift-status-desc');
+      const trigger = document.getElementById('shift-widget-trigger');
+
+      if (!isJourneyActive) {
+        // Pivot to active transit configuration patterns
+        isJourneyActive = true;
+        widget.classList.add('active-drive');
+        iconFrame.innerHTML = `<i data-lucide="truck"></i>`;
+        title.innerText = "Active Shift Run Tracking";
+        desc.innerText = "In Transit to Destination Site Location...";
+        trigger.className = "widget-action-btn btn-arrive-shift";
+        trigger.innerHTML = `<span>Log Arrival Stop</span> <i data-lucide="map-pin" size="14"></i>`;
+        
+        // Dynamic context alert path link route simulation redirection hook
+        trigger.setAttribute('onclick', "location.href='./trip-tracker-sandbox.html'");
+      }
+      lucide.createIcons();
+    }
+
+    // Toggle menu logic patterns
+    function toggleMoreMenu() {
+        const isVisible = moreMenuPanel.classList.contains('visible');
+        if (isVisible) {
+            closeMoreMenu();
+        } else {
+            moreMenuPanel.classList.add('visible');
+            menuOverlay.classList.add('visible');
+        }
+    }
+
+    function closeMoreMenu() {
+        moreMenuPanel.classList.remove('visible');
+        menuOverlay.classList.remove('visible');
+    }
+</script>
+</body>
+</html>

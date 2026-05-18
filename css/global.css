@@ -564,6 +564,37 @@ input[type="password"] {
   color: #999;
 }
 
+/* =========================================
+   Shift Logistics Widget Styles
+   ========================================= */
+.shift-widget {
+  background: white; border-radius: 20px; padding: 16px; margin-bottom: 24px;
+  border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+  transition: all 0.25s ease;
+}
+.shift-widget.active-drive { border-color: var(--warning); background: var(--warning-soft); }
+.widget-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.widget-icon-frame {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--primary-soft);
+  color: var(--primary); display: flex; align-items: center; justify-content: center;
+}
+.active-drive .widget-icon-frame { background: #fff; color: var(--warning); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.widget-title h4 { font-size: 14px; font-weight: 700; color: var(--text-strong); margin: 0; }
+.widget-title p { font-size: 11px; color: var(--text-muted); font-weight: 500; margin: 0; }
+
+.widget-action-btn {
+  width: 100%; padding: 12px; border: none; border-radius: 12px; font-size: 13px;
+  font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: background-color 0.2s;
+}
+.btn-start-shift { background: var(--primary); color: white; }
+.btn-start-shift:hover { opacity: 0.9; }
+.btn-arrive-shift { background: var(--warning); color: white; }
+.btn-arrive-shift:hover { opacity: 0.9; }
+
+/* =========================================
+   Search Bar & Tabs
+   ========================================= */
 .search-bar {
   display: flex;
   align-items: center;
@@ -654,15 +685,25 @@ input[type="password"] {
 
 .site-card {
   min-width: 280px;
-  border-radius: 24px;
-  color: #ffffff;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+  color: var(--text-strong);
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
-.blue-card { background: linear-gradient(135deg, #7aa6ff, #578cff); }
-.purple-card { background: linear-gradient(135deg, #b99bf5, #a37df5); }
+.site-card-meta { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center; }
+.status-pill { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; background: var(--primary-soft); color: var(--primary); }
+.site-card h4 { font-size: 16px; font-weight: 700; color: var(--text-strong); margin: 0 0 4px 0; }
+.site-card p { font-size: 12px; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 4px; margin: 0; }
+
+.blue-card { background: linear-gradient(135deg, #7aa6ff, #578cff); color: white; }
+.purple-card { background: linear-gradient(135deg, #b99bf5, #a37df5); color: white; }
 
 .card-top {
   padding: 20px;
@@ -932,6 +973,11 @@ input[type="password"] {
 
 .calendar-day.selected {
   border: 1px solid #1866ff;
+}
+
+.calendar-day.on-leave {
+  background: var(--warning-soft);
+  color: #b45309;
 }
 
 .event-dots {

@@ -18,6 +18,7 @@
         <span class="online-dot-avatar"></span>
       </div>
     </header>
+    
 
     <!-- Sync Status -->
     <div class="sync-status">
@@ -30,14 +31,20 @@
       </div>
     </div>
 
-    <!-- Search Bar -->
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24" width="20" height="20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <input type="text" placeholder="Search" />
-    </div>
+    <div class="shift-widget" id="shift-logistics-widget">
+        <div class="widget-header">
+          <div class="widget-icon-frame" id="shift-icon-frame">
+            <i data-lucide="car" size="18"></i>
+          </div>
+          <div class="widget-title">
+            <h4 id="shift-status-title">Logistics Status Idle</h4>
+            <p id="shift-status-desc">You haven't initialized travel runs today.</p>
+          </div>
+        </div>
+        <button class="widget-action-btn btn-start-shift" id="shift-widget-trigger" onclick="location.href='./Journey & Expense.html'">
+          <span>Start Daily Journey</span> <i data-lucide="play" size="14"></i>
+        </button>
+      </div>
 
     <!-- Toggle Tabs -->
     <div class="toggle-tabs">
@@ -45,18 +52,27 @@
       <button class="tab">Scheduled <span class="badge-count">10</span></button>
     </div>
 
-    <!-- Horizontal Site Cards -->
-    <div class="site-cards-container">
-    </div>
+  <div class="site-cards-container">
+        <div class="site-card" onclick="location.href='../Task page.html'">
+          <div class="site-card-meta">
+            <span class="status-pill">Next Priority</span>
+            <span style="font-size:12px; font-weight:600; color:var(--text-muted);">ID: TSK-003</span>
+          </div>
+          <h4>Core Network Node DC-02</h4>
+          <p><i data-lucide="map-pin" size="14"></i> Row C to Row F Overhead Containments</p>
+          <p style="margin-top: 6px; color: var(--primary); font-weight: 700;">
+            <i data-lucide="clock" size="14"></i> 10:00 AM - 01:00 PM
+          </p>
+        </div>
+      </div>
 
-    <!-- Pagination Dots -->
-    <div class="pagination-dots">
-      <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    </div>
-
+      <div class="pagination-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    
     <!-- Messages Section -->
     <div class="home-section-header">
       <h3>Messages / Threaded Communications</h3>
