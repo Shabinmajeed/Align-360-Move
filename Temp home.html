@@ -166,7 +166,7 @@
     /* FLOATING BOTTOM NAVIGATION BAR PROTOTYPE   */
     /* ========================================== */
     .bottom-nav {
-      position: fixed; bottom: 20px; left: 25px; right: 25px;
+      position: absolute; bottom: 20px; left: 25px; right: 25px;
       width: auto; margin: 0 auto; max-width: 320px;
       background-color: white; display: flex; justify-content: space-around;
       align-items: center; padding: 12px 0; border-radius: 40px;
@@ -185,7 +185,7 @@
 
     /* More Floating Panel Drawer Overlays */
     .more-menu-panel {
-      position: fixed; bottom: 100px; right: 35px; left: auto;
+      position: absolute; bottom: 100px; right: 35px; left: auto;
       margin: 0; width: auto; background-color: transparent;
       border: none; box-shadow: none; z-index: 1001;
       display: flex; flex-direction: column; gap: 12px; align-items: flex-end;
@@ -207,7 +207,7 @@
     .more-menu-item:hover .more-icon-wrapper, .more-menu-item:active .more-icon-wrapper { background-color: #f8fafc; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
     .more-menu-item svg { width: 22px; height: 22px; color: var(--text-muted); }
 
-    .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.1); z-index: 998; display: none; }
+    .menu-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.1); z-index: 998; display: none; }
     .menu-overlay.visible { display: block; }
   </style>
 </head>
